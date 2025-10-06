@@ -6,6 +6,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
 import { useReviews } from '../context/ReviewsContext';
 import LazyImage from './LazyImage';
+import { useNavigate } from 'react-router-dom';
 import {
   Eye,
   Star,
@@ -27,6 +28,8 @@ const ProductCard = ({ product, index = 0 }) => {
   const { getProductRating, getProductReviews } = useReviews();
   const [isHovered, setIsHovered] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const navigate = useNavigate();
+
 
   const rating = getProductRating(product.id);
   const reviewCount = getProductReviews(product.id).length;
@@ -40,8 +43,6 @@ const ProductCard = ({ product, index = 0 }) => {
   const handleAddToCart = async (e) => {
     e.stopPropagation();
     setIsAddingToCart(true);
-
-    // Simulate API call delay
     setTimeout(() => {
       addToCart(product);
       showSuccess(`${product.name} added to cart!`);
@@ -83,11 +84,7 @@ const ProductCard = ({ product, index = 0 }) => {
         transition={{ duration: 0.3 }}
       >
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-red-600 rounded-full blur-2xl"></div>
-          <div className="absolute bottom-0 left-0 w-20 h-20 bg-red-400 rounded-full blur-xl"></div>
-        </div>
-
+      
         {/* Product Badges */}
         <div className="absolute top-3 left-3 z-20 flex flex-col space-y-2">
           <AnimatePresence>
@@ -132,13 +129,13 @@ const ProductCard = ({ product, index = 0 }) => {
           </AnimatePresence>
         </div>
 
-        <Link to={`/product/${product.id}`} className="block">
+        <div className="block">
           {/* Image Section */}
           <div className="relative overflow-hidden">
             <LazyImage
               src={product.image}
               alt={product.name}
-              className="w-full h-64"
+              className="w-full h-48 sm:h-56 lg:h-64"
             />
 
             {/* Dynamic Overlay */}
@@ -158,7 +155,7 @@ const ProductCard = ({ product, index = 0 }) => {
             >
               <motion.button
                 onClick={handleWishlistToggle}
-                className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-white transition-all duration-200"
+                className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-white transition-all duration-200 cursor-pointer"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -172,8 +169,8 @@ const ProductCard = ({ product, index = 0 }) => {
               </motion.button>
 
               <motion.button
-                onClick={handleQuickView}
-                className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-white transition-all duration-200"
+                onClick={() => navigate(`/product/${product.id}`) }
+                className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-white transition-all duration-200 cursor-pointer"
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -181,68 +178,33 @@ const ProductCard = ({ product, index = 0 }) => {
               </motion.button>
             </div>
 
-            {/* Quick Add to Cart Overlay */}
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pointer-events-none"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <motion.button
-                    onClick={handleAddToCart}
-                    disabled={isAddingToCart}
-                    className="w-full bg-white text-red-600 font-semibold py-2 px-4 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center space-x-2 pointer-events-auto"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {isAddingToCart ? (
-                      <>
-                        <motion.div
-                          className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full"
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        />
-                        <span>Adding...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="w-4 h-4" />
-                        <span>Quick Add</span>
-                      </>
-                    )}
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          
           </div>
 
           {/* Content Section */}
-          <div className="p-6">
+          <div className="p-4 sm:p-5 lg:p-6">
             {/* Product Name */}
             <motion.div
-              className="mb-3"
+              className="mb-2 sm:mb-3"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <div className="flex items-center space-x-2 mb-1">
-                <h3 className="text-xl font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 leading-tight">
+              <div className="flex items-start sm:items-center space-x-2 mb-1">
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 leading-tight flex-1">
                   {product.name}
                 </h3>
                 {/* Verified Seller Badge */}
-                <div className="flex-shrink-0 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
-                  <Shield className="w-3 h-3" />
-                  <span>Verified</span>
+                <div className="flex-shrink-0 bg-green-100 text-green-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                  <Shield className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  <span className="hidden sm:inline">Verified</span>
                 </div>
               </div>
             </motion.div>
 
             {/* Rating and Price Row */}
             <motion.div
-              className="flex items-center justify-between mb-4"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -251,19 +213,19 @@ const ProductCard = ({ product, index = 0 }) => {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                    className={`w-3 h-3 sm:w-4 sm:h-4 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
                   />
                 ))}
-                <span className="text-sm text-gray-600 ml-1">({reviewCount})</span>
+                <span className="text-xs sm:text-sm text-gray-600 ml-1">({reviewCount})</span>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-col items-center space-x-1 sm:space-x-2">
                 {isOnSale && (
-                  <span className="text-sm text-gray-500 line-through">
+                  <span className="text-xs sm:text-sm text-gray-500 line-through">
                     ₦{(product.price * (1 + discount / 100)).toLocaleString()}
                   </span>
                 )}
-                <span className="text-2xl font-bold gradient-bg bg-clip-text text-transparent">
+                <span className="text-sm sm:text-sm lg:text-sm p-2 rounded-2xl font-bold gradient-bg bg-clip-text text-white">
                   ₦{product.price.toLocaleString()}
                 </span>
               </div>
@@ -271,29 +233,30 @@ const ProductCard = ({ product, index = 0 }) => {
 
             {/* Product Features */}
             <motion.div
-              className="flex items-center justify-between text-sm text-gray-600 mb-4"
+              className="flex items-center justify-between text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
               <div className="flex items-center space-x-1">
-                <Sparkles className="w-4 h-4 text-yellow-500" />
-                <span>Premium Quality</span>
+                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500" />
+                <span className="hidden sm:inline">Premium Quality</span>
+                <span className="sm:hidden">Premium</span>
               </div>
               <div className="flex items-center space-x-1">
-                <Check className="w-4 h-4 text-green-500" />
+                <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-500" />
                 <span>In Stock</span>
               </div>
             </motion.div>
           </div>
-        </Link>
+        </div>
 
         {/* Add to Cart Button */}
-        <div className="px-6 pb-6">
+        <div className="px-4 sm:px-5 lg:px-6 pb-4 sm:pb-5 lg:pb-6">
           <motion.button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className="btn-primary w-full flex items-center justify-center space-x-2 relative overflow-hidden"
+            className="btn-primary w-full flex items-center justify-center space-x-2 relative overflow-hidden text-sm sm:text-base cursor-pointer"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -304,14 +267,14 @@ const ProductCard = ({ product, index = 0 }) => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center space-x-2"
+                  className="flex items-center space-x-1 sm:space-x-2"
                 >
                   <motion.div
-                    className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                    className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full"
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   />
-                  <span>Adding to Cart...</span>
+                  <span className="text-xs sm:text-sm">Adding...</span>
                 </motion.div>
               ) : (
                 <motion.div
@@ -319,14 +282,18 @@ const ProductCard = ({ product, index = 0 }) => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="flex items-center space-x-2"
+                  className="flex items-center space-x-1 sm:space-x-2"
                 >
-                  <ShoppingCart className="w-5 h-5" />
+                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>Add to Cart</span>
                 </motion.div>
               )}
             </AnimatePresence>
           </motion.button>
+          <button onClick={handleWishlistToggle} className='md:hidden btn-secondary w-full flex items-center justify-center space-x-2 relative overflow-hidden text-sm sm:text-base cursor-pointer mt-4'>
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+             <span>Add to Wishlist</span>
+          </button>
         </div>
 
         {/* Decorative Elements */}

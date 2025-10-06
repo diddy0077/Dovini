@@ -62,23 +62,23 @@ const Header = () => {
             </div>
       <HeaderAd/>
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-md border-b border-red-100">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="bg-red-600 p-2 rounded-lg shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart w-6 h-6 text-white" aria-hidden="true"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="bg-red-600 p-1.5 sm:p-2 rounded-lg shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart w-4 h-4 sm:w-6 sm:h-6 text-white" aria-hidden="true"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
           </div>
           <Link
             to="/"
-            className="text-2xl font-extrabold bg-gradient-to-r from-red-600 to-black bg-clip-text text-transparent hover:scale-110 transition-transform duration-300"
+            className="text-lg sm:text-2xl font-extrabold bg-gradient-to-r from-red-600 to-black bg-clip-text text-transparent hover:scale-110 transition-transform duration-300"
           >
-            DOVINI <span className="text-gray-800">Camera<br/> & Gears</span>
+            DOVINI <span className="text-gray-800 text-sm sm:text-base">Camera<br className="sm:hidden"/> & Gears</span>
           </Link>
           </div>
 
           {/* Navigation (Desktop) */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
             <Link
               to="/"
               className="relative flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium group after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 hover:after:w-full"
@@ -115,7 +115,7 @@ const Header = () => {
           </nav>
 
           {/* User Menu / Auth (Desktop) */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
             {user ? (
               <div className="relative" ref={userMenuRef}>
                 <button
@@ -125,9 +125,9 @@ const Header = () => {
                   <img
                     src={user.avatar}
                     alt={user.name}
-                    className="w-8 h-8 rounded-full border-2 border-red-200"
+                    className="w-7 h-7 lg:w-8 lg:h-8 rounded-full border-2 border-red-200"
                   />
-                  <span className="font-medium">{user.name}</span>
+                  <span className="font-medium text-sm lg:text-base hidden xl:inline">{user.name}</span>
                 </button>
 
                 {isUserMenuOpen && (
@@ -179,16 +179,16 @@ const Header = () => {
                 )}
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 lg:space-x-3">
                 <Link
                   to="/login"
-                  className="text-gray-700 hover:text-red-600 font-medium transition-colors duration-200"
+                  className="text-gray-700 hover:text-red-600 font-medium text-sm lg:text-base transition-colors duration-200"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/signup"
-                  className="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-200"
+                  className="bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg font-medium text-sm lg:text-base hover:shadow-lg transition-all duration-200"
                 >
                   Sign Up
                 </Link>
@@ -213,33 +213,24 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-6 pb-6 border-t border-red-100 pt-6 animate-slide-in-left">
-            <nav className="flex flex-col space-y-4">
+          <div className="md:hidden mt-4 pb-4 border-t border-red-100 pt-4 animate-slide-in-left">
+            <nav className="flex flex-col space-y-3">
               <Link
                 to="/"
-                className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-3 rounded-lg hover:bg-red-50"
+                className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-2.5 rounded-lg hover:bg-red-50"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Home className="w-5 h-5" />
-                <span>Home</span>
-              </Link>
-
-              <Link
-                to="/categories"
-                className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-3 rounded-lg hover:bg-red-50"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Grid3X3 className="w-5 h-5" />
-                <span>Categories</span>
+                <Home className="w-4 h-4" />
+                <span className="text-sm">Home</span>
               </Link>
 
               <Link
                 to="/wishlist"
-                className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium relative p-3 rounded-lg hover:bg-red-50"
+                className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium relative p-2.5 rounded-lg hover:bg-red-50"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Heart className="w-5 h-5" />
-                <span>Wishlist</span>
+                <Heart className="w-4 h-4" />
+                <span className="text-sm">Wishlist</span>
                 {wishlistCount > 0 && (
                   <span className="bg-red-600 text-white text-xs rounded-full px-2 py-0.5 font-bold ml-2 animate-pulse">
                     {wishlistCount}
@@ -249,11 +240,11 @@ const Header = () => {
 
               <Link
                 to="/cart"
-                className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium relative p-3 rounded-lg hover:bg-red-50"
+                className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium relative p-2.5 rounded-lg hover:bg-red-50"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <ShoppingCart className="w-5 h-5" />
-                <span>Cart</span>
+                <ShoppingCart className="w-4 h-4" />
+                <span className="text-sm">Cart</span>
                 {cartCount > 0 && (
                   <span className="bg-red-600 text-white text-xs rounded-full px-2 py-0.5 font-bold ml-2 animate-pulse">
                     {cartCount}
@@ -264,42 +255,42 @@ const Header = () => {
               {/* Auth Section (Mobile) */}
               {user ? (
                 <div className="border-t border-red-100 pt-4 mt-4">
-                  <div className="flex items-center space-x-3 p-3 bg-red-50 rounded-lg mb-4">
+                  <div className="flex items-center space-x-2 p-2.5 bg-red-50 rounded-lg mb-3">
                     <img
                       src={user.avatar}
                       alt={user.name}
-                      className="w-10 h-10 rounded-full border-2 border-red-200"
+                      className="w-8 h-8 rounded-full border-2 border-red-200"
                     />
                     <div>
-                      <p className="font-medium text-gray-900">{user.name}</p>
-                      <p className="text-sm text-gray-600">{user.email}</p>
+                      <p className="font-medium text-gray-900 text-sm">{user.name}</p>
+                      <p className="text-xs text-gray-600">{user.email}</p>
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <Link
                       to="/profile"
-                      className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-3 rounded-lg hover:bg-red-50"
+                      className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-2.5 rounded-lg hover:bg-red-50"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <User className="w-5 h-5" />
-                      <span>Profile</span>
+                      <User className="w-4 h-4" />
+                      <span className="text-sm">Profile</span>
                     </Link>
                     <Link
                       to="/orders"
-                      className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-3 rounded-lg hover:bg-red-50"
+                      className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-2.5 rounded-lg hover:bg-red-50"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <ShoppingBag className="w-5 h-5" />
-                      <span>Orders</span>
+                      <ShoppingBag className="w-4 h-4" />
+                      <span className="text-sm">Orders</span>
                     </Link>
                     {user.role === 'seller' && (
                       <Link
                         to="/seller/dashboard"
-                        className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-3 rounded-lg hover:bg-red-50"
+                        className="flex items-center space-x-3 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium p-2.5 rounded-lg hover:bg-red-50"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <Settings className="w-5 h-5" />
-                        <span>Seller Dashboard</span>
+                        <Settings className="w-4 h-4" />
+                        <span className="text-sm">Seller Dashboard</span>
                       </Link>
                     )}
                     <button
@@ -307,25 +298,25 @@ const Header = () => {
                         logout();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="flex items-center space-x-3 w-full text-red-600 hover:text-red-700 transition-all duration-300 font-medium p-3 rounded-lg hover:bg-red-50"
+                      className="flex items-center space-x-3 w-full text-red-600 hover:text-red-700 transition-all duration-300 font-medium p-2.5 rounded-lg hover:bg-red-50"
                     >
-                      <LogOut className="w-5 h-5" />
-                      <span>Logout</span>
+                      <LogOut className="w-4 h-4" />
+                      <span className="text-sm">Logout</span>
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="border-t border-red-100 pt-4 mt-4 space-y-3">
+                <div className="border-t border-red-100 pt-3 mt-3 space-y-2">
                   <Link
                     to="/login"
-                    className="flex items-center justify-center w-full bg-red-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-red-700 transition-all duration-300"
+                    className="flex items-center justify-center w-full bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md hover:bg-red-700 transition-all duration-300 text-sm"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign In
                   </Link>
                   <Link
                     to="/signup"
-                    className="flex items-center justify-center w-full bg-white text-red-600 font-semibold py-3 px-4 rounded-lg border-2 border-red-600 shadow-md hover:bg-red-50 transition-all duration-300"
+                    className="flex items-center justify-center w-full bg-white text-red-600 font-semibold py-2.5 px-4 rounded-lg border-2 border-red-600 shadow-md hover:bg-red-50 transition-all duration-300 text-sm"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign Up
@@ -333,8 +324,8 @@ const Header = () => {
                 </div>
               )}
 
-              <div className="flex items-center space-x-3 text-white font-semibold bg-red-600 px-4 py-3 rounded-lg shadow-md mt-4">
-                <Phone className="w-5 h-5" />
+              <div className="flex items-center space-x-2 text-white font-semibold bg-red-600 px-4 py-2.5 rounded-lg shadow-md mt-3 text-sm">
+                <Phone className="w-4 h-4" />
                 <span>08063971335</span>
               </div>
             </nav>
@@ -342,20 +333,20 @@ const Header = () => {
         )}
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="mt-6 relative group">
+        <form onSubmit={handleSearch} className="mt-4 sm:mt-6 relative group">
           <input
             type="text"
-            placeholder="Search products, brands and categories..."
+            placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-14 pr-14 py-4 border border-gray-200 rounded-full focus:outline-none focus:ring-4 focus:ring-red-200 focus:border-transparent shadow-md hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm text-base md:text-sm"
+            className="w-full pl-12 sm:pl-14 pr-12 sm:pr-14 py-3 sm:py-4 border border-gray-200 rounded-full focus:outline-none focus:ring-4 focus:ring-red-200 focus:border-transparent shadow-md hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm text-sm sm:text-base"
           />
-          <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+          <Search className="absolute left-4 sm:left-5 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
           <button
             type="submit"
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition-colors"
+            className="absolute flex items-center justify-center right-2 sm:right-3 top-1/2 transform -translate-y-1/2 bg-red-600 text-white p-1.5 sm:p-2 rounded-full hover:bg-red-700 transition-colors"
           >
-            <Search className="w-4 h-4" />
+            <Search className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
         </form>
       </div>

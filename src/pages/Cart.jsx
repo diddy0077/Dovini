@@ -33,14 +33,14 @@ import {
 } from 'lucide-react';
 
 const Cart = () => {
-  const { cart, updateQuantity, removeFromCart, getTotal, saveForLater, moveToCart } = useCart();
+  const { cart, updateQuantity, removeFromCart, getTotal } = useCart();
   const [savedItems, setSavedItems] = useState([]);
   const [selectedShipping, setSelectedShipping] = useState('standard');
   const [giftMessage, setGiftMessage] = useState('');
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState(0);
 
-  console.log("Cart component mounted");
+
 
 
   // Mock cross-sell recommendations
@@ -92,16 +92,16 @@ const Cart = () => {
             </motion.div>
 
             <motion.h1
-              className="text-5xl md:text-6xl font-black text-gray-800 mb-6"
+              className="text-4xl md:text-5xl font-black text-gray-800 mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
-              Your Cart is <span className="gradient-bg bg-clip-text text-transparent">Empty</span>
+              Your Cart is Empty
             </motion.h1>
 
             <motion.p
-              className="text-xl text-gray-600 max-w-2xl mx-auto mb-8"
+              className="text-lg text-gray-600 max-w-2xl mx-auto mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
@@ -144,44 +144,7 @@ const Cart = () => {
               <p className="text-gray-600">Products you might be interested in</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {Array.from({ length: 6 }, (_, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -8 }}
-                  className="group"
-                >
-                  <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
-                    <div className="relative overflow-hidden">
-                      <div className="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse"></div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-
-                    <div className="p-6">
-                      <div className="h-6 bg-gray-200 rounded animate-pulse mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded animate-pulse mb-3 w-3/4"></div>
-
-                      <div className="flex items-center space-x-2 mb-3">
-                        <div className="h-6 bg-red-200 rounded animate-pulse w-20"></div>
-                      </div>
-
-                      <div className="flex items-center space-x-2 mb-4">
-                        <div className="flex space-x-1">
-                          {[...Array(5)].map((_, i) => (
-                            <div key={i} className="w-4 h-4 bg-yellow-200 rounded animate-pulse"></div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="w-full h-12 bg-gradient-to-r from-red-200 to-red-300 rounded-xl animate-pulse"></div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <RecentlyViewedSection limit={6} />
           </motion.div>
         </div>
       </div>
@@ -189,37 +152,37 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white py-8">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <motion.div
-          className="flex items-center justify-between mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex items-center space-x-4">
-            <Link
-              to="/"
-              className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Continue Shopping</span>
-            </Link>
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white py-4 sm:py-8">
+        <div className="container mx-auto px-3 sm:px-4">
+          {/* Header */}
+          <motion.div
+            className="mb-6 sm:mb-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+              <Link
+                to="/"
+                className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors w-fit"
+              >
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="text-sm sm:text-base">Continue Shopping</span>
+              </Link>
 
-          <div className="text-center">
-            <h1 className="text-3xl font-black text-gray-800">Shopping Cart</h1>
-            <p className="text-gray-600">{cart.length} item{cart.length !== 1 ? 's' : ''} in your cart</p>
-          </div>
+              <div className="text-center sm:text-left">
+                <h1 className="text-2xl sm:text-3xl font-black text-gray-800">Shopping Cart</h1>
+                <p className="text-gray-600 text-sm sm:text-base">{cart.length} item{cart.length !== 1 ? 's' : ''} in your cart</p>
+              </div>
 
-          <div className="flex items-center space-x-2">
-            <Shield className="w-5 h-5 text-green-600" />
-            <span className="text-sm text-gray-600">Secure Checkout</span>
-          </div>
-        </motion.div>
+              <div className="flex items-center space-x-2 justify-center sm:justify-end">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                <span className="text-xs sm:text-sm text-gray-600">Secure Checkout</span>
+              </div>
+            </div>
+          </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-6">
             {/* Cart Items Header */}
@@ -253,96 +216,100 @@ const Cart = () => {
                       transition={{ delay: index * 0.1, duration: 0.5 }}
                       whileHover={{ scale: 1.02, y: -2 }}
                     >
-                      <div className="flex items-center space-x-6">
-                        {/* Product Image */}
-                        <div className="relative">
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-24 h-24 object-cover rounded-xl shadow-md"
-                          />
-                          {item.isFlashDeal && (
-                            <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse-slow">
-                              🔥
-                            </div>
-                          )}
-                        </div>
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6">
+                        {/* Product Image and Basic Info */}
+                        <div className="flex items-center space-x-4 sm:space-x-6 flex-shrink-0">
+                          <div className="relative">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl shadow-md"
+                            />
+                            {item.isFlashDeal && (
+                              <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse-slow">
+                                🔥
+                              </div>
+                            )}
+                          </div>
 
-                        {/* Product Details */}
-                        <div className="flex-grow">
-                          <h3 className="text-lg font-bold text-gray-800 mb-1">{item.name}</h3>
-                          <p className="text-gray-600 text-sm mb-2">Brand: {item.brand || 'Premium'}</p>
+                          {/* Product Details */}
+                          <div className="flex-grow min-w-0">
+                            <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-1 line-clamp-2">{item.name}</h3>
+                            <p className="text-gray-600 text-xs sm:text-sm mb-2">Brand: {item.brand || 'Premium'}</p>
 
-                          <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-2xl font-black text-red-600">
+                            {/* Price */}
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="text-lg sm:text-2xl font-black text-red-600">
                                 ₦{item.price.toLocaleString()}
                               </span>
                               {item.originalPrice && (
-                                <span className="text-lg text-gray-500 line-through">
+                                <span className="text-sm sm:text-lg text-gray-500 line-through">
                                   ₦{item.originalPrice.toLocaleString()}
                                 </span>
                               )}
                             </div>
-
-                            {/* Quantity Controls */}
-                            <div className="flex items-center space-x-2 bg-white rounded-lg border border-gray-200 p-1">
-                              <motion.button
-                                onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                              >
-                                <Minus className="w-4 h-4" />
-                              </motion.button>
-
-                              <span className="w-12 text-center font-semibold text-gray-800">
-                                {item.quantity}
-                              </span>
-
-                              <motion.button
-                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                              >
-                                <Plus className="w-4 h-4" />
-                              </motion.button>
-                            </div>
-
-                            {/* Item Total */}
-                            <div className="text-right">
-                              <div className="text-lg font-bold text-gray-800">
-                                ₦{(item.price * item.quantity).toLocaleString()}
-                              </div>
-                              <div className="text-sm text-gray-600">
-                                ₦{item.price.toLocaleString()} each
-                              </div>
-                            </div>
                           </div>
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex flex-col space-y-2">
-                          <motion.button
-                            onClick={() => handleSaveForLater(item)}
-                            className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <BookmarkPlus className="w-4 h-4" />
-                            <span className="text-sm">Save</span>
-                          </motion.button>
+                        {/* Quantity and Actions */}
+                        <div className="flex items-center justify-between sm:justify-end sm:space-x-4 flex-shrink-0">
+                          {/* Quantity Controls */}
+                          <div className="flex items-center space-x-2 bg-white rounded-lg border border-gray-200 p-1">
+                            <motion.button
+                              onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
+                            </motion.button>
 
-                          <motion.button
-                            onClick={() => removeFromCart(item.id)}
-                            className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            <span className="text-sm">Remove</span>
-                          </motion.button>
+                            <span className="w-8 sm:w-12 text-center font-semibold text-gray-800 text-sm sm:text-base">
+                              {item.quantity}
+                            </span>
+
+                            <motion.button
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                            </motion.button>
+                          </div>
+
+                          {/* Item Total */}
+                          <div className="text-right sm:mr-4">
+                            <div className="text-base sm:text-lg font-bold text-gray-800">
+                              ₦{(item.price * item.quantity).toLocaleString()}
+                            </div>
+                            <div className="text-xs sm:text-sm text-gray-600">
+                              ₦{item.price.toLocaleString()} each
+                            </div>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2 ml-4 sm:ml-0">
+                            <motion.button
+                              onClick={() => handleSaveForLater(item)}
+                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-blue-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-blue-50"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <BookmarkPlus className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span className="text-xs sm:text-sm hidden sm:inline">Save</span>
+                            </motion.button>
+
+                            <motion.button
+                              onClick={() => removeFromCart(item.id)}
+                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-red-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-red-50"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span className="text-xs sm:text-sm hidden sm:inline">Remove</span>
+                            </motion.button>
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -438,17 +405,17 @@ const Cart = () => {
           </div>
 
           {/* Order Summary Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Order Summary */}
             <motion.div
-              className="bg-white rounded-2xl shadow-xl p-6 sticky top-6"
+              className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:sticky lg:top-6"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
-                <CreditCard className="w-6 h-6 text-red-600" />
-                <span>Order Summary</span>
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center space-x-2">
+                <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
+                <span className="text-sm sm:text-base">Order Summary</span>
               </h2>
 
               {/* Promo Code */}
@@ -484,8 +451,8 @@ const Cart = () => {
               </div>
 
               {/* Shipping Options */}
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Shipping Method</h3>
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Shipping Method</h3>
                 <div className="space-y-2">
                   {[
                     { id: 'free', name: 'Free Shipping', cost: 0, time: '5-7 business days', icon: Truck },
@@ -495,7 +462,7 @@ const Cart = () => {
                     <motion.div
                       key={option.id}
                       onClick={() => setSelectedShipping(option.id)}
-                      className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
+                      className={`p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
                         selectedShipping === option.id
                           ? 'border-red-500 bg-red-50'
                           : 'border-gray-200 hover:border-gray-300'
@@ -504,15 +471,15 @@ const Cart = () => {
                       whileTap={{ scale: 0.98 }}
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <option.icon className={`w-5 h-5 ${selectedShipping === option.id ? 'text-red-600' : 'text-gray-600'}`} />
+                        <div className="flex items-center space-x-2 sm:space-x-3">
+                          <option.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${selectedShipping === option.id ? 'text-red-600' : 'text-gray-600'}`} />
                           <div>
-                            <div className="font-semibold text-gray-800">{option.name}</div>
-                            <div className="text-sm text-gray-600">{option.time}</div>
+                            <div className="font-semibold text-gray-800 text-sm sm:text-base">{option.name}</div>
+                            <div className="text-xs sm:text-sm text-gray-600">{option.time}</div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-gray-800">
+                          <div className="font-bold text-gray-800 text-sm sm:text-base">
                             {option.cost === 0 ? 'FREE' : `₦${option.cost.toLocaleString()}`}
                           </div>
                         </div>
@@ -569,17 +536,17 @@ const Cart = () => {
 
               {/* Checkout Button */}
               <motion.div
-                className="mt-8"
+                className="mt-6 sm:mt-8"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
                   to="/checkout"
-                  className="w-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white py-4 px-6 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-3"
+                  className="w-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 sm:space-x-3"
                 >
-                  <Lock className="w-5 h-5" />
+                  <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>Secure Checkout</span>
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Link>
               </motion.div>
 

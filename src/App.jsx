@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy,useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
@@ -16,7 +16,7 @@ import Chat from './components/Chat';
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
 const Category = lazy(() => import('./pages/Category'));
-// const Products = lazy(() => import('./pages/Products'));
+const Products = lazy(() => import('./pages/Products'));
 import ProductDetails from './pages/ProductDetails';
 const Wishlist = lazy(() => import('./pages/Wishlist'));
 const Cart = lazy(() => import('./pages/Cart'));
@@ -34,6 +34,7 @@ const PageLoader = () => (
 );
 
 const App = () => {
+    const [recent, setRecent] = useState([]);
   return (
     <AuthProvider>
       <ChatProvider>
@@ -49,10 +50,10 @@ const App = () => {
                         <Routes>
                           <Route path="/" element={<Home />} />
                           <Route path="/category/:id" element={<Category />} />
-                          {/* <Route path="/products" element={<Products />} /> */}
-                          <Route path="/product/:id" element={<ProductDetails />} />
+                          <Route path="/products" element={<Products />} />
+                          <Route path="/product/:id" element={<ProductDetails recent={recent} setRecent={setRecent}/>} />
                           <Route path="/wishlist" element={<Wishlist />} />
-                          <Route path="/cart" element={<Cart />} />
+                          <Route path="/cart" element={<Cart recent={recent} setRecent={setRecent}/>} />
                           <Route path="/checkout" element={<Checkout />} />
                           <Route path="/login" element={<Login />} />
                           <Route path="/signup" element={<Signup />} />

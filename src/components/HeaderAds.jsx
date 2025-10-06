@@ -142,12 +142,12 @@ const HeaderAd = () => {
         />
       </div>
 
-      <div className="relative px-3 sm:px-4 py-2 sm:py-3">
+      <div className="relative px-3 sm:px-4 py-1.5 sm:py-3">
         <div className="max-w-7xl mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentAdData.id}
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4"
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -50, opacity: 0 }}
@@ -155,7 +155,7 @@ const HeaderAd = () => {
             >
               {/* Top Section - Badge and Title (Mobile) */}
               <div className="flex items-center justify-between sm:hidden">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
                   {/* Badge */}
                   <motion.div
                     className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full border border-white/30"
@@ -170,12 +170,12 @@ const HeaderAd = () => {
 
                   {/* Icon */}
                   <motion.div
-                    className="bg-white/20 backdrop-blur-sm p-1.5 rounded-full"
+                    className="bg-white/20 backdrop-blur-sm p-1 rounded-full"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                   >
-                    <IconComponent className="w-4 h-4 text-white" />
+                    <IconComponent className="w-3.5 h-3.5 text-white" />
                   </motion.div>
                 </div>
 
@@ -196,7 +196,7 @@ const HeaderAd = () => {
               </div>
 
               {/* Main Content Section */}
-              <div className="flex items-center space-x-3 sm:space-x-4 flex-1">
+              <div className="flex items-center space-x-2 sm:space-x-4 flex-1">
                 {/* Badge and Icon (Desktop) */}
                 <div className="hidden sm:flex items-center space-x-3">
                   {/* Badge */}
@@ -255,7 +255,7 @@ const HeaderAd = () => {
                   {/* Mobile Content */}
                   <div className="sm:hidden">
                     <motion.h3
-                      className="text-white font-bold text-sm tracking-wide mb-1"
+                      className="text-white font-bold text-xs tracking-wide mb-0.5"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.4 }}
@@ -263,7 +263,7 @@ const HeaderAd = () => {
                       {currentAdData.title}
                     </motion.h3>
                     <motion.p
-                      className="text-white/90 text-sm font-medium leading-tight"
+                      className="text-white/90 text-xs font-medium leading-tight"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.5 }}
@@ -271,7 +271,7 @@ const HeaderAd = () => {
                       {currentAdData.message}
                     </motion.p>
                     <motion.p
-                      className="text-white/70 text-xs mt-0.5"
+                      className="text-white/70 text-xs mt-0.5 leading-tight"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.6 }}
@@ -292,17 +292,17 @@ const HeaderAd = () => {
                 >
                   <Link
                     to={currentAdData.link}
-                    className="group bg-white text-gray-900 px-4 py-2 rounded-full font-semibold text-sm hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl"
+                    className="group bg-white text-gray-900 px-3 py-1.5 rounded-full font-semibold text-xs hover:bg-gray-50 transition-all duration-200 flex items-center space-x-1.5 shadow-lg hover:shadow-xl"
                   >
                     <span>{currentAdData.cta}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </motion.div>
 
                 {/* Ad Indicators (Mobile) */}
-                <div className="flex items-center space-x-1">
+                <div className="flex justify-center items-center space-x-1 ">
                   {ads.map((_, index) => (
-                    <button
+                    <div
                       key={index}
                       onClick={() => setCurrentAd(index)}
                       className={`w-2 h-2 rounded-full transition-all duration-200 ${
@@ -310,7 +310,7 @@ const HeaderAd = () => {
                           ? 'bg-white shadow-lg'
                           : 'bg-white/40 hover:bg-white/60'
                       }`}
-                    />
+                    ></div>
                   ))}
                 </div>
               </div>

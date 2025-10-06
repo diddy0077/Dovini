@@ -38,7 +38,7 @@ const CategoryCard = ({ category }) => {
             <motion.img
               src={category.image}
               alt={category.name}
-              className="w-full h-56 object-cover"
+              className="w-full h-40 sm:h-48 lg:h-56 object-cover"
               whileHover={{ scale: 1.15 }}
               transition={{ duration: 0.6 }}
             />
@@ -81,10 +81,10 @@ const CategoryCard = ({ category }) => {
           </div>
 
           {/* Content Section */}
-          <div className="p-6 relative z-10">
+          <div className="p-4 sm:p-5 lg:p-6 relative z-10">
             {/* Category Name */}
             <motion.h3
-              className="text-2xl font-bold text-gray-800 mb-3 group-hover:text-red-600 transition-colors duration-300 text-center"
+              className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 group-hover:text-red-600 transition-colors duration-300 text-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
@@ -94,7 +94,7 @@ const CategoryCard = ({ category }) => {
 
             {/* Description */}
             <motion.p
-              className="text-gray-600 text-sm text-center mb-4 leading-relaxed"
+              className="text-gray-600 text-xs sm:text-sm text-center mb-3 sm:mb-4 leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -104,14 +104,15 @@ const CategoryCard = ({ category }) => {
 
             {/* Stats */}
             <motion.div
-              className="flex items-center justify-between text-sm"
+              className="flex items-center justify-between text-xs sm:text-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
               <div className="flex items-center text-gray-500">
-                <Sparkles className="w-4 h-4 mr-1 text-yellow-500" />
-                <span>Premium Quality</span>
+                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-yellow-500" />
+                <span className="hidden sm:inline">Premium Quality</span>
+                <span className="sm:hidden">Premium</span>
               </div>
               <div className="text-red-600 font-semibold">
                 From ₦{avgPrice.toLocaleString()}
