@@ -33,7 +33,7 @@ import {
 } from 'lucide-react';
 
 const Cart = () => {
-  const { cart, updateQuantity, removeFromCart, getTotal } = useCart();
+  const { cart, updateQuantity, removeFromCart, getTotal,addToCart } = useCart();
   const [savedItems, setSavedItems] = useState([]);
   const [selectedShipping, setSelectedShipping] = useState('standard');
   const [giftMessage, setGiftMessage] = useState('');
@@ -58,7 +58,7 @@ const Cart = () => {
 
   const handleMoveToCart = (item) => {
     setSavedItems(prev => prev.filter(saved => saved.id !== item.id));
-    // In a real app, you'd call moveToCart from context
+    addToCart(item);
   };
 
   const applyPromoCode = () => {
@@ -292,7 +292,7 @@ const Cart = () => {
                           <div className="flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2 ml-4 sm:ml-0">
                             <motion.button
                               onClick={() => handleSaveForLater(item)}
-                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-blue-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-blue-50"
+                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-blue-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-blue-50 cursor-pointer"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
@@ -302,7 +302,7 @@ const Cart = () => {
 
                             <motion.button
                               onClick={() => removeFromCart(item.id)}
-                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-red-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-red-50"
+                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-red-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-red-50 cursor-pointer"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
@@ -344,7 +344,7 @@ const Cart = () => {
 
                       <motion.button
                         onClick={() => handleMoveToCart(item)}
-                        className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
+                        className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 cursor-pointer"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >

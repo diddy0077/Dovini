@@ -215,7 +215,7 @@ const Hero = () => {
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 shadow-2xl border border-white/20">
                   <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-lg overflow-hidden shadow-lg">
                     <img
-                      src="https://m.media-amazon.com/images/I/61-yY0-vLkL._AC_SL1500_.jpg"
+                      src="https://images.unsplash.com/photo-1595793550800-5bdd9d23b2fa?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                       alt="Professional Softbox Kit"
                       className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />

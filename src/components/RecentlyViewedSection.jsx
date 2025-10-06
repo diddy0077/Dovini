@@ -29,26 +29,32 @@ const RecentlyViewedSection = ({ limit = 6 }) => {
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {recentlyViewed.map((product) => (
-            <motion.div
-              key={product.id}
-              className="group cursor-pointer"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <Link to={`/product/${product.id}`}>
-                <div className="bg-gray-50 rounded-lg p-3 hover:bg-red-50 transition-colors">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-20 object-cover rounded mb-2"
-                  />
-                  <h4 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-red-600 transition-colors">
-                    {product.name}
-                  </h4>
-                  <p className="text-red-600 font-bold text-sm">₦{product.price.toLocaleString()}</p>
-                </div>
-              </Link>
-            </motion.div>
+             <motion.div
+                    key={product.id}
+                    className="bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer"
+                    whileHover={{ y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <Link to={`/product/${product.id}`}>
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-20 object-cover rounded mb-2"
+                      />
+                      <h4 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-red-600 transition-colors">
+                        {product.name}
+                      </h4>
+                      <p className="text-red-600 font-bold text-sm">₦{product.price.toLocaleString()}</p>
+                      <div className="flex items-center mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                          />
+                        ))}
+                      </div>
+                    </Link>
+                  </motion.div>
           ))}
         </div>
       )}
