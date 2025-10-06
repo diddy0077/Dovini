@@ -16,7 +16,7 @@ import Chat from './components/Chat';
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
 const Category = lazy(() => import('./pages/Category'));
-const Products = lazy(() => import('./pages/Products'));
+// const Products = lazy(() => import('./pages/Products'));
 import ProductDetails from './pages/ProductDetails';
 const Wishlist = lazy(() => import('./pages/Wishlist'));
 const Cart = lazy(() => import('./pages/Cart'));
@@ -49,7 +49,7 @@ const App = () => {
                         <Routes>
                           <Route path="/" element={<Home />} />
                           <Route path="/category/:id" element={<Category />} />
-                          <Route path="/products" element={<Products />} />
+                          {/* <Route path="/products" element={<Products />} /> */}
                           <Route path="/product/:id" element={<ProductDetails />} />
                           <Route path="/wishlist" element={<Wishlist />} />
                           <Route path="/cart" element={<Cart />} />

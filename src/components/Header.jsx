@@ -53,9 +53,16 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white/80 backdrop-blur-lg shadow-lg sticky top-0 z-50 border-b border-red-100">
+    <>
+         <div className="bg-red-600 hidden sm:block">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 flex justify-end space-x-4">
+                    <a href="#" className="text-xs text-white opacity-90 hover:opacity-100 transition">Buy on Dovini</a>
+                    <a href="#" className="text-xs text-white opacity-90 hover:opacity-100 transition">Download App</a>
+                </div>
+            </div>
       <HeaderAd/>
-      <div className="container mx-auto px-4 py-4">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-md border-b border-red-100">
+        <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
@@ -66,7 +73,7 @@ const Header = () => {
             to="/"
             className="text-2xl font-extrabold bg-gradient-to-r from-red-600 to-black bg-clip-text text-transparent hover:scale-110 transition-transform duration-300"
           >
-            Dovini <span className="text-gray-800">Camera & Gears</span>
+            DOVINI <span className="text-gray-800">Camera<br/> & Gears</span>
           </Link>
           </div>
 
@@ -78,22 +85,6 @@ const Header = () => {
             >
               <Home className="w-5 h-5 group-hover:scale-110 transition-transform" />
               <span>Home</span>
-            </Link>
-
-            <Link
-              to="/products"
-              className="relative flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium group after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 hover:after:w-full"
-            >
-              <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span>Shop</span>
-            </Link>
-
-            <Link
-              to="/categories"
-              className="relative flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-300 font-medium group after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 hover:after:w-full"
-            >
-              <Grid3X3 className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span>Categories</span>
             </Link>
 
             <Link
@@ -354,7 +345,7 @@ const Header = () => {
         <form onSubmit={handleSearch} className="mt-6 relative group">
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search products, brands and categories..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-14 pr-14 py-4 border border-gray-200 rounded-full focus:outline-none focus:ring-4 focus:ring-red-200 focus:border-transparent shadow-md hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm text-base md:text-sm"
@@ -369,6 +360,7 @@ const Header = () => {
         </form>
       </div>
     </header>
+    </>
   );
 };
 
