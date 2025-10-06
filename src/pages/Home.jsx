@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import BannerSlider from '../components/BannerSlider';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
@@ -7,14 +8,22 @@ import NewsletterSignup from '../components/NewsletterSignup';
 import Testimonials from '../components/Testimonials';
 import { categories } from '../data/categories';
 import { products } from '../data/products';
-import { Phone, Trophy, Truck, MessageCircle, ArrowRight, Award, Users, Clock, Zap, Package, Heart, ShoppingBag, Timer, Flame, Sparkles,Star } from 'lucide-react';
+import { Phone, Trophy, Truck, MessageCircle, ArrowRight, Award, Users, Clock, Zap, Package, Heart, ShoppingBag, Timer, Flame, Sparkles,Star, Eye, Share2, Bell } from 'lucide-react';
 import CallForDealsBanner from '../components/CallForDeals';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useToast } from '../context/ToastContext';
 
 const PhoneIcon = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 3.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
 );
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  const { showSuccess, showError } = useToast();
+
   const featuredProducts = products.slice(0, 8); // Show first 8 products
   const flashDeals = products.filter(product => product.isFlashDeal).slice(0, 6);
   const limitedStock = products.filter(product => product.isLimitedStock).slice(0, 6);
@@ -38,6 +47,59 @@ const Home = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  // Handler functions for interactive buttons
+  const handleBuyNow = (product) => {
+    addToCart(product);
+    showSuccess(`🎉 ${product.name} added to cart!`, {
+      action: {
+        label: 'View Cart',
+        onClick: () => navigate('/cart')
+      }
+    });
+  };
+
+  const handleGrabItNow = (product) => {
+    addToCart(product);
+    showSuccess(`⚡ ${product.name} secured! Limited stock grabbed!`, {
+      action: {
+        label: 'Checkout Now',
+        onClick: () => navigate('/cart')
+      }
+    });
+  };
+
+  const handleWishlistToggle = (product) => {
+    toggleWishlist(product);
+    const isInWish = isInWishlist(product.id);
+    showSuccess(
+      isInWish
+        ? `💔 ${product.name} removed from wishlist`
+        : `❤️ ${product.name} added to wishlist!`
+    );
+  };
+
+  const handleQuickView = (product) => {
+    navigate(`/product/${product.id}`);
+  };
+
+  const handleShare = (product) => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.name,
+        text: `Check out this amazing ${product.name} on Dovini!`,
+        url: window.location.origin + `/product/${product.id}`
+      });
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(window.location.origin + `/product/${product.id}`);
+      showSuccess('🔗 Product link copied to clipboard!');
+    }
+  };
+
+  const handleNotifyWhenBackInStock = (product) => {
+    showSuccess(`🔔 We'll notify you when ${product.name} is back in stock!`);
+  };
 
   
 
@@ -157,18 +219,28 @@ const Home = () => {
                     {/* Quick Actions */}
                     <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <motion.button
+                        onClick={() => handleWishlistToggle(product)}
                         className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                       >
-                        <Heart className="w-4 h-4 text-red-600" />
+                        <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'text-red-600 fill-red-600' : 'text-red-600'}`} />
                       </motion.button>
                       <motion.button
+                        onClick={() => handleQuickView(product)}
                         className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                       >
-                        <ShoppingBag className="w-4 h-4 text-red-600" />
+                        <Eye className="w-4 h-4 text-red-600" />
+                      </motion.button>
+                      <motion.button
+                        onClick={() => handleShare(product)}
+                        className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <Share2 className="w-4 h-4 text-red-600" />
                       </motion.button>
                     </div>
                   </div>
@@ -211,11 +283,13 @@ const Home = () => {
                         </span>
                       </div>
                       <motion.button
-                        className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
+                        onClick={() => handleBuyNow(product)}
+                        className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center space-x-2"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        Buy Now
+                        <ShoppingBag className="w-4 h-4" />
+                        <span>Buy Now</span>
                       </motion.button>
                     </div>
                   </div>
@@ -233,6 +307,7 @@ const Home = () => {
             viewport={{ once: true }}
           >
             <motion.button
+              onClick={() => navigate('/products?flashDeals=true')}
               className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 mx-auto"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
@@ -342,6 +417,44 @@ const Home = () => {
                       {product.name}
                     </h3>
 
+                    {/* Action Buttons Row */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex space-x-2">
+                        <motion.button
+                          onClick={() => handleWishlistToggle(product)}
+                          className="p-2 rounded-lg bg-gray-100 hover:bg-red-100 transition-colors"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'text-red-600 fill-red-600' : 'text-gray-600'}`} />
+                        </motion.button>
+                        <motion.button
+                          onClick={() => handleQuickView(product)}
+                          className="p-2 rounded-lg bg-gray-100 hover:bg-blue-100 transition-colors"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Eye className="w-4 h-4 text-gray-600" />
+                        </motion.button>
+                        <motion.button
+                          onClick={() => handleShare(product)}
+                          className="p-2 rounded-lg bg-gray-100 hover:bg-green-100 transition-colors"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Share2 className="w-4 h-4 text-gray-600" />
+                        </motion.button>
+                      </div>
+                      <motion.button
+                        onClick={() => handleNotifyWhenBackInStock(product)}
+                        className="p-2 rounded-lg bg-gray-100 hover:bg-purple-100 transition-colors"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Bell className="w-4 h-4 text-gray-600" />
+                      </motion.button>
+                    </div>
+
                     {/* Pricing */}
                     <div className="flex items-center space-x-2 mb-3">
                       <span className="text-2xl font-black text-amber-600">
@@ -386,6 +499,7 @@ const Home = () => {
 
                     {/* CTA Button */}
                     <motion.button
+                      onClick={() => handleGrabItNow(product)}
                       className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -417,6 +531,7 @@ const Home = () => {
                 These limited stock items are disappearing fast. Add them to your cart before someone else gets them!
               </p>
               <motion.button
+                onClick={() => navigate('/products?limitedStock=true')}
                 className="bg-white text-amber-600 px-8 py-3 rounded-full font-bold hover:bg-amber-50 transition-colors flex items-center space-x-2 mx-auto shadow-lg"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -549,7 +664,7 @@ const Home = () => {
 
                     {/* Hover Overlay */}
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-t from-red-600/90 via-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-6"
+                      className="absolute pointer-events-none inset-0 bg-gradient-to-t from-red-600/90 via-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-6"
                       initial={{ y: 20 }}
                       whileHover={{ y: 0 }}
                     >
@@ -941,7 +1056,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <Testimonials />
+      {/* <Testimonials /> */}
 
       {/* Newsletter Signup Section */}
       <section className="py-16 bg-gradient-to-r from-red-50 to-red-100">

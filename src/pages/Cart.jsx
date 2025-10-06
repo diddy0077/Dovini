@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
+import RecentlyViewedSection from '../components/RecentlyViewedSection';
 import {
   MessageCircle,
   ShoppingCart,
@@ -39,8 +40,8 @@ const Cart = () => {
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState(0);
 
-  // Mock recently viewed products (in a real app, this would come from localStorage or context)
-  const recentlyViewed = products.slice(10, 16);
+  console.log("Cart component mounted");
+
 
   // Mock cross-sell recommendations
   const recommendations = products.filter(p => !cart.some(item => item.id === p.id)).slice(0, 4);
@@ -144,9 +145,9 @@ const Cart = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {recentlyViewed.map((product, index) => (
+              {Array.from({ length: 6 }, (_, index) => (
                 <motion.div
-                  key={product.id}
+                  key={index}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
@@ -155,52 +156,27 @@ const Cart = () => {
                 >
                   <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
                     <div className="relative overflow-hidden">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
+                      <div className="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse"></div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <Heart className="w-6 h-6 text-white drop-shadow-lg" />
-                      </div>
                     </div>
 
                     <div className="p-6">
-                      <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-red-600 transition-colors">
-                        {product.name}
-                      </h3>
+                      <div className="h-6 bg-gray-200 rounded animate-pulse mb-2"></div>
+                      <div className="h-4 bg-gray-200 rounded animate-pulse mb-3 w-3/4"></div>
 
                       <div className="flex items-center space-x-2 mb-3">
-                        <span className="text-2xl font-black text-red-600">
-                          ₦{product.price.toLocaleString()}
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-lg text-gray-500 line-through">
-                            ₦{product.originalPrice.toLocaleString()}
-                          </span>
-                        )}
+                        <div className="h-6 bg-red-200 rounded animate-pulse w-20"></div>
                       </div>
 
                       <div className="flex items-center space-x-2 mb-4">
-                        <div className="flex items-center">
+                        <div className="flex space-x-1">
                           {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
-                            />
+                            <div key={i} className="w-4 h-4 bg-yellow-200 rounded animate-pulse"></div>
                           ))}
                         </div>
-                        <span className="text-sm text-gray-600">({product.reviews})</span>
                       </div>
 
-                      <Link
-                        to={`/product/${product.id}`}
-                        className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>View Details</span>
-                      </Link>
+                      <div className="w-full h-12 bg-gradient-to-r from-red-200 to-red-300 rounded-xl animate-pulse"></div>
                     </div>
                   </div>
                 </motion.div>
@@ -414,42 +390,7 @@ const Cart = () => {
             )}
 
             {/* Recently Viewed */}
-            <motion.div
-              className="bg-white rounded-2xl shadow-xl p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
-                <Eye className="w-5 h-5 text-green-600" />
-                <span>Recently Viewed</span>
-              </h3>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {recentlyViewed.slice(0, 6).map((product, index) => (
-                  <motion.div
-                    key={product.id}
-                    className="group cursor-pointer"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <Link to={`/product/${product.id}`}>
-                      <div className="bg-gray-50 rounded-lg p-3 hover:bg-red-50 transition-colors">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full h-20 object-cover rounded mb-2"
-                        />
-                        <h4 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-red-600 transition-colors">
-                          {product.name}
-                        </h4>
-                        <p className="text-red-600 font-bold text-sm">₦{product.price.toLocaleString()}</p>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+            <RecentlyViewedSection limit={6} />
 
             {/* Cross-sell Recommendations */}
             <motion.div

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion,AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
+import { useReviews } from '../context/ReviewsContext';
+import LazyImage from './LazyImage';
 import {
   Eye,
   Star,
@@ -14,15 +16,20 @@ import {
   TrendingUp,
   Plus,
   Check,
-  Sparkles
+  Sparkles,
+  Shield
 } from 'lucide-react';
 
 const ProductCard = ({ product, index = 0 }) => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { showSuccess } = useToast();
+  const { getProductRating, getProductReviews } = useReviews();
   const [isHovered, setIsHovered] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+  const rating = getProductRating(product.id);
+  const reviewCount = getProductReviews(product.id).length;
 
   // Simulate product status (in a real app, this would come from props or API)
   const isNew = index < 3; // First 3 products are "new"
@@ -31,7 +38,7 @@ const ProductCard = ({ product, index = 0 }) => {
   const discount = isOnSale ? Math.floor(Math.random() * 30) + 10 : 0;
 
   const handleAddToCart = async (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     setIsAddingToCart(true);
 
     // Simulate API call delay
@@ -43,7 +50,7 @@ const ProductCard = ({ product, index = 0 }) => {
   };
 
   const handleWishlistToggle = (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     toggleWishlist(product);
     showSuccess(
       isInWishlist(product.id)
@@ -53,7 +60,7 @@ const ProductCard = ({ product, index = 0 }) => {
   };
 
   const handleQuickView = (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     // In a real app, this would open a modal
     showSuccess(`Quick view for ${product.name}`);
   };
@@ -65,9 +72,10 @@ const ProductCard = ({ product, index = 0 }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
       whileHover={{ y: -12, rotateY: 2 }}
+      whileTap={{ scale: 0.98 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      style={{ perspective: "1000px" }}
+      style={{ perspective: "1000px", touchAction: "manipulation" }}
     >
       <motion.div
         className="card overflow-hidden relative"
@@ -85,6 +93,7 @@ const ProductCard = ({ product, index = 0 }) => {
           <AnimatePresence>
             {isNew && (
               <motion.div
+                key="new-badge"
                 initial={{ scale: 0, rotate: -45 }}
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0, rotate: -45 }}
@@ -96,6 +105,7 @@ const ProductCard = ({ product, index = 0 }) => {
             )}
             {isBestseller && (
               <motion.div
+                key="bestseller-badge"
                 initial={{ scale: 0, rotate: -45 }}
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0, rotate: -45 }}
@@ -108,6 +118,7 @@ const ProductCard = ({ product, index = 0 }) => {
             )}
             {isOnSale && (
               <motion.div
+                key="sale-badge"
                 initial={{ scale: 0, rotate: -45 }}
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0, rotate: -45 }}
@@ -124,12 +135,10 @@ const ProductCard = ({ product, index = 0 }) => {
         <Link to={`/product/${product.id}`} className="block">
           {/* Image Section */}
           <div className="relative overflow-hidden">
-            <motion.img
+            <LazyImage
               src={product.image}
               alt={product.name}
-              className="w-full h-64 object-cover"
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.6 }}
+              className="w-full h-64"
             />
 
             {/* Dynamic Overlay */}
@@ -143,7 +152,10 @@ const ProductCard = ({ product, index = 0 }) => {
             />
 
             {/* Action Buttons */}
-            <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <div
+              className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
               <motion.button
                 onClick={handleWishlistToggle}
                 className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-white transition-all duration-200"
@@ -176,12 +188,13 @@ const ProductCard = ({ product, index = 0 }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4"
+                  className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pointer-events-none"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <motion.button
                     onClick={handleAddToCart}
                     disabled={isAddingToCart}
-                    className="w-full bg-white text-red-600 font-semibold py-2 px-4 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center space-x-2"
+                    className="w-full bg-white text-red-600 font-semibold py-2 px-4 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center space-x-2 pointer-events-auto"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -209,14 +222,23 @@ const ProductCard = ({ product, index = 0 }) => {
           {/* Content Section */}
           <div className="p-6">
             {/* Product Name */}
-            <motion.h3
-              className="text-xl font-bold text-gray-800 mb-3 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 leading-tight"
+            <motion.div
+              className="mb-3"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              {product.name}
-            </motion.h3>
+              <div className="flex items-center space-x-2 mb-1">
+                <h3 className="text-xl font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 leading-tight">
+                  {product.name}
+                </h3>
+                {/* Verified Seller Badge */}
+                <div className="flex-shrink-0 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                  <Shield className="w-3 h-3" />
+                  <span>Verified</span>
+                </div>
+              </div>
+            </motion.div>
 
             {/* Rating and Price Row */}
             <motion.div
@@ -227,9 +249,12 @@ const ProductCard = ({ product, index = 0 }) => {
             >
               <div className="flex items-center space-x-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                  />
                 ))}
-                <span className="text-sm text-gray-600 ml-1">(4.8)</span>
+                <span className="text-sm text-gray-600 ml-1">({reviewCount})</span>
               </div>
 
               <div className="flex items-center space-x-2">
@@ -312,4 +337,4 @@ const ProductCard = ({ product, index = 0 }) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

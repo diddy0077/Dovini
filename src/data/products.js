@@ -6,7 +6,7 @@ export const products = [
     price: 150000,
     originalPrice: 180000,
     discount: 17,
-    image: 'https://placehold.co/600x400/FF5733/white?text=Softbox+Kit',
+    image: 'https://m.media-amazon.com/images/I/61-yY0-vLkL._AC_SL1500_.jpg',
     description: 'High-quality softbox for studio photography, provides soft and even lighting.',
     categoryId: 1,
     brand: 'Godox',
@@ -17,9 +17,8 @@ export const products = [
     flashDealEnd: '2024-12-25T23:59:59',
     isLimitedStock: false,
     images: [
-      'https://placehold.co/400x300/FF5733/white?text=Softbox+View+1',
-      'https://placehold.co/400x300/FF5733/white?text=Softbox+View+2',
-      'https://placehold.co/400x300/FF5733/white?text=Softbox+View+3',
+      'https://control.spop.com.ng/pages/uploads/product/2024-10-29-QZwTD3GKWnuRatoheE6H/IMG-20241001-WA0295.jpg',
+      'https://m.media-amazon.com/images/I/61CY5SS7BrL._AC_SL1500_.jpg',
     ],
   },
   {
@@ -171,7 +170,7 @@ export const products = [
     price: 100000,
     originalPrice: 120000,
     discount: 17,
-    image: 'https://placehold.co/600x400/FF33A1/white?text=Octagon+Softbox',
+    image: 'https://m.media-amazon.com/images/I/71CIOaJn+2L._AC_SL1500_.jpg',
     description: 'Octagonal softbox for portrait photography.',
     categoryId: 1,
     brand: 'Profoto',
@@ -181,7 +180,7 @@ export const products = [
     isFlashDeal: false,
     isLimitedStock: false,
     images: [
-      'https://placehold.co/400x300/FF33A1/white?text=Octagon+View+1',
+      'https://m.media-amazon.com/images/I/71CIOaJn+2L._AC_SL1500_.jpg',
       'https://placehold.co/400x300/FF33A1/white?text=Octagon+View+2',
     ],
   },

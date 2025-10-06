@@ -72,3 +72,42 @@ export const CategoryGridSkeleton = ({ count = 4 }) => (
     ))}
   </div>
 );
+
+// Default export for general page loading
+const LoadingSkeleton = ({ type = 'page' }) => {
+  if (type === 'page') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-red-50/20 to-white">
+        <div className="text-center">
+          <motion.div
+            className="w-16 h-16 border-4 border-red-200 border-t-red-600 rounded-full mx-auto mb-4"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.h3
+            className="text-xl font-semibold text-gray-700"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Loading...
+          </motion.h3>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === 'spinner') {
+    return (
+      <motion.div
+        className="w-6 h-6 border-2 border-red-200 border-t-red-600 rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      />
+    );
+  }
+
+  return <ProductCardSkeleton />;
+};
+
+export default LoadingSkeleton;

@@ -21,16 +21,16 @@ const CategoryCard = ({ category }) => {
       transition={{ duration: 0.4, ease: "easeOut" }}
       style={{ perspective: "1000px" }}
     >
-      <Link to={`/category/${category.id}`} className="block">
+      <Link to={`/products?category=${category.name.toLowerCase().replace(/\s+/g, '-')}`} className="block">
         <motion.div
           className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden relative border border-gray-100"
           whileHover={{ scale: 1.03 }}
           transition={{ duration: 0.4 }}
         >
           {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-600 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-red-400 rounded-full blur-2xl"></div>
+          <div className="absolute pointer-events-none inset-0 opacity-5">
+            <div className="absolute pointer-events-none top-0 right-0 w-32 h-32 bg-red-600 rounded-full blur-3xl"></div>
+            <div className="absolute pointer-events-none bottom-0 left-0 w-24 h-24 bg-red-400 rounded-full blur-2xl"></div>
           </div>
 
           {/* Image Section */}
@@ -161,3 +161,4 @@ const CategoryCard = ({ category }) => {
 };
 
 export default CategoryCard;
+
