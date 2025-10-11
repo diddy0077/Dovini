@@ -26,23 +26,44 @@ const slides = [
   {
     title: "CAPTURE THE MOMENT",
     subtitle: "Up to 40% Off Premium Lenses and Kits.",
-    backgroundImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    backgroundImage: "https://images.unsplash.com/photo-1606983340222-685b8ad6a142?q=80&w=870&auto=format&fit=crop",
     tag: "SHUTTER SALE",
     tagColor: "bg-red-600",
   },
   {
     title: "NEW DOVINI MARK V",
     subtitle: "Pre-order now and get a free battery grip!",
-    backgroundImage: "https://images.unsplash.com/photo-1642606570507-ca8e13b8784d?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    backgroundImage: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=870&auto=format&fit=crop",
     tag: "PRE-ORDER",
     tagColor: "bg-gray-900",
   },
   {
     title: "DRONE FLYAWAY SALE",
     subtitle: "Massive discounts on all Aerial Gear. Limited stock!",
-    backgroundImage: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    backgroundImage: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=870&auto=format&fit=crop",
     tag: "FLY HIGH",
     tagColor: "bg-red-600",
+  },
+  {
+    title: "PROFESSIONAL LIGHTING",
+    subtitle: "Studio lights and modifiers at unbeatable prices.",
+    backgroundImage: "https://images.unsplash.com/photo-1552168324-d612d77725e3?q=80&w=870&auto=format&fit=crop",
+    tag: "LIGHT UP",
+    tagColor: "bg-yellow-600",
+  },
+  {
+    title: "ACCESSORY BUNDLE",
+    subtitle: "Complete your kit with essential accessories.",
+    backgroundImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=870&auto=format&fit=crop",
+    tag: "BUNDLE DEAL",
+    tagColor: "bg-green-600",
+  },
+  {
+    title: "USED GEAR MARKET",
+    subtitle: "Certified pre-owned equipment at great prices.",
+    backgroundImage: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=870&auto=format&fit=crop",
+    tag: "PRE-OWNED",
+    tagColor: "bg-blue-600",
   },
 ];
 
@@ -129,9 +150,9 @@ const InfoButton = ({ title, description, Icon }) => (
 const Hero = () => {
   // State for the main carousel
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = slides.length;
+  const totalSlides = 3; // for desktop carousel
 
-  // Auto-advance logic for the carousel
+  // Auto-advance logic for the carousel (desktop)
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentSlide((prevIndex) => (prevIndex + 1) % totalSlides);
@@ -155,9 +176,9 @@ const Hero = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
+    <div className=" bg-gray-100 font-sans">
       <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-0 lg:mb-8">
           {/* 1. Left Categories Sidebar (Jumia-style menu) */}
           <div className="lg:col-span-3 xl:col-span-2 hidden lg:block">
             <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200">
@@ -181,68 +202,112 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* 2. Central Main Banner (Carousel Slider) */}
+          {/* 2. Central Main Banner */}
           <div className="col-span-1 lg:col-span-6 xl:col-span-7">
-            <div
-              className="relative overflow-hidden h-[300px] sm:h-[400px] lg:h-[450px] rounded-xl shadow-2xl flex items-center justify-between p-6 md:p-12 transition-all duration-500 ease-in-out"
-              style={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${slide.backgroundImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat'
-              }}
-            >
-              {/* Decorative Tag */}
+            {/* Desktop Carousel */}
+            <div className="hidden sm:block">
               <div
-                className={`absolute top-0 left-0 ${slide.tagColor} text-white px-4 sm:px-6 py-2 rounded-br-xl text-sm sm:text-lg font-extrabold shadow-md transform -translate-x-1 -translate-y-1 rotate-1 z-20`}
+                className="relative overflow-hidden h-[300px] sm:h-[400px] lg:h-[450px] rounded-xl shadow-2xl flex items-center justify-between p-6 md:p-12 transition-all duration-500 ease-in-out"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${slide.backgroundImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
               >
-                <Zap className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" />
-                {slide.tag}
-              </div>
+                {/* Decorative Tag */}
+                <div
+                  className={`absolute top-0 left-0 ${slide.tagColor} text-white px-4 sm:px-6 py-2 rounded-br-xl text-sm sm:text-lg font-extrabold shadow-md transform -translate-x-1 -translate-y-1 rotate-1 z-20`}
+                >
+                  <Zap className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" />
+                  {slide.tag}
+                </div>
 
-              {/* Text Content */}
-              <div className="z-10 max-w-md">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-2 drop-shadow-lg">
-                  <span className="text-red-400">DOVINI</span> {slide.title}
-                </h1>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-100 mb-4 sm:mb-6 drop-shadow-md">
-                  {slide.subtitle}
-                </p>
-              </div>
+                {/* Text Content */}
+                <div className="z-10 max-w-md">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-2 drop-shadow-lg">
+                    <span className="text-red-400">DOVINI</span> {slide.title}
+                  </h1>
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-100 mb-4 sm:mb-6 drop-shadow-md">
+                    {slide.subtitle}
+                  </p>
+                </div>
 
-              {/* Featured Product Image */}
-              <div className="relative z-10 hidden sm:block">
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 shadow-2xl border border-white/20">
-                  <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-lg overflow-hidden shadow-lg">
-                    <img
-                      src="https://images.unsplash.com/photo-1595793550800-5bdd9d23b2fa?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt="Professional Softbox Kit"
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
+                {/* Featured Product Image */}
+                <div className="relative z-10 hidden sm:block">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 shadow-2xl border border-white/20">
+                    <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-lg overflow-hidden shadow-lg">
+                      <img
+                        src="https://images.unsplash.com/photo-1595793550800-5bdd9d23b2fa?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Professional Softbox Kit"
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Navigation Dots */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                {slides.map((_, index) => (
+                {/* Navigation Dots */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                  {slides.slice(0, 3).map((_, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        currentSlide === index
+                          ? "bg-red-400 w-5"
+                          : "bg-white opacity-50"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Horizontal Scroll */}
+            <div className="sm:hidden">
+              <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <style>{`
+                  .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}</style>
+                {slides.map((slide, index) => (
                   <div
                     key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      currentSlide === index
-                        ? "bg-red-400 w-5"
-                        : "bg-white opacity-50"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  ></div>
+                    className="flex-shrink-0 w-72 h-48 rounded-xl shadow-2xl relative overflow-hidden flex items-center justify-between p-4 transition-all duration-300 hover:shadow-3xl"
+                    style={{
+                      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${slide.backgroundImage})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat'
+                    }}
+                  >
+                    {/* Decorative Tag */}
+                    <div
+                      className={`absolute top-0 left-0 ${slide.tagColor} text-white px-3 py-1 rounded-br-lg text-xs font-extrabold shadow-md transform -translate-x-1 -translate-y-1 rotate-1 z-20`}
+                    >
+                      <Zap className="w-3 h-3 inline mr-1" />
+                      {slide.tag}
+                    </div>
+
+                    {/* Text Content */}
+                    <div className="z-10 max-w-xs">
+                      <h1 className="text-lg font-extrabold leading-tight text-white mb-1 drop-shadow-lg">
+                        <span className="text-red-400">DOVINI</span> {slide.title}
+                      </h1>
+                      <p className="text-xs font-light text-gray-100 drop-shadow-md">
+                        {slide.subtitle}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
 
           {/* 3. Right Info Panel (Utility Links) */}
-          <div className="col-span-1 lg:col-span-3 xl:col-span-3">
+          <div className="col-span-1 lg:col-span-3 xl:col-span-3 hidden lg:block">
             <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 space-y-2">
               <InfoButton
                 title="Expert Support"
@@ -272,8 +337,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* --- New Section: Horizontal Scrolling Promo Tiles --- */}
-        <div className="relative py-4">
+        <div className="relative py-2 lg:py-4 mt-4">
           {/* Scroll Buttons */}
           <button
             onClick={() => scrollContainer("left")}

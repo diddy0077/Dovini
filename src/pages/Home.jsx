@@ -5,7 +5,6 @@ import BannerSlider from '../components/BannerSlider';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 import NewsletterSignup from '../components/NewsletterSignup';
-import Testimonials from '../components/Testimonials';
 import { categories } from '../data/categories';
 import { products } from '../data/products';
 import { Phone, Trophy, Truck, MessageCircle, ArrowRight, Award, Users, Clock, Zap, Package, Heart, ShoppingBag, Timer, Flame, Sparkles,Star, Eye, Share2, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -19,35 +18,187 @@ const PhoneIcon = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 3.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
 );
 
+const Countdown = ({ endTime }) => {
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date().getTime();
+      const end = new Date(endTime).getTime();
+      const difference = end - now;
+
+      if (difference > 0) {
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / (1000 * 60)) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        setTimeLeft({ hours, minutes, seconds });
+      } else {
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(timer);
+  }, [endTime]);
+
+  return (
+    <div className="flex items-center space-x-1 text-xs font-bold text-red-600">
+      <Clock className="w-3 h-3" />
+      <div className="flex items-center space-x-1">
+        <span>{timeLeft.hours.toString().padStart(2, '0')}</span>
+        <span>:</span>
+        <span>{timeLeft.minutes.toString().padStart(2, '0')}</span>
+        <span>:</span>
+        <span>{timeLeft.seconds.toString().padStart(2, '0')}</span>
+      </div>
+    </div>
+  );
+};
+
+const MobileFlashDealsCarousel = ({ flashDeals, onBuyNow, onWishlistToggle, onQuickView, isInWishlist }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === flashDeals.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000); // Auto-slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [flashDeals.length]);
+
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div className="relative">
+      {/* Carousel Container */}
+      <div className="overflow-hidden rounded-2xl bg-white shadow-xl border border-red-100">
+        <div
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {flashDeals.map((product, index) => (
+            <motion.div
+              key={product.id}
+              className="flex-shrink-0 w-full p-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{
+                opacity: index === currentIndex ? 1 : 0.7,
+                scale: index === currentIndex ? 1 : 0.95
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="bg-gradient-to-br from-white to-red-50 rounded-xl p-4 shadow-lg border border-red-100">
+                {/* Flash Deal Badge */}
+                <div className="absolute top-2 left-2 z-20 bg-gradient-to-r from-red-500 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse-slow">
+                  -{product.discount}%
+                </div>
+
+                {/* Product Image */}
+                <div className="relative mb-3">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-32 object-cover rounded-lg"
+                  />
+                </div>
+
+                {/* Product Info */}
+                <div className="space-y-2">
+                  <h3 className="text-sm font-bold text-gray-800 line-clamp-2 leading-tight">
+                    {product.name}
+                  </h3>
+
+                  {/* Pricing */}
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg font-black text-red-600">
+                      ₦{product.price.toLocaleString()}
+                    </span>
+                    <span className="text-sm text-gray-500 line-through">
+                      ₦{product.originalPrice.toLocaleString()}
+                    </span>
+                  </div>
+
+                  {/* Countdown */}
+                  <Countdown endTime={product.flashDealEnd} />
+
+                  {/* Rating */}
+                  <div className="flex items-center space-x-1">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-xs text-gray-600">({product.reviews})</span>
+                  </div>
+
+                  {/* Stock & CTA */}
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex items-center space-x-1">
+                      <Package className="w-3 h-3 text-green-600" />
+                      <span className="text-xs text-green-600 font-medium">
+                        {product.stock > 10 ? 'In Stock' : `${product.stock} left`}
+                      </span>
+                    </div>
+                    <motion.button
+                      onClick={() => onBuyNow(product)}
+                      className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:shadow-md transition-all duration-300 flex items-center space-x-1"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <ShoppingBag className="w-3 h-3" />
+                      <span>Buy</span>
+                    </motion.button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dots Indicator */}
+      <div className="flex justify-center space-x-2 mt-4">
+        {flashDeals.map((_, index) => (
+          <div
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex
+                ? 'bg-red-500 w-6'
+                : 'bg-gray-300 hover:bg-gray-400'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          ></div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
-  const { showSuccess, showError } = useToast();
+  const { showSuccess } = useToast();
 
   const featuredProducts = products // Show first 8 products
   const flashDeals = products.filter(product => product.isFlashDeal).slice(0, 6);
   const limitedStock = products.filter(product => product.isLimitedStock).slice(0, 9);
 
-  // Countdown timer for flash deals
-  const [timeLeft, setTimeLeft] = useState({ hours: 24, minutes: 0, seconds: 0 });
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        }
-        return prev;
-      });
-    }, 1000);
+   useEffect(() => {
+     window.scrollTo({top: 0, behavior: 'smooth'})
+    },[])
 
-    return () => clearInterval(timer);
-  }, []);
 
   // Handler functions for interactive buttons
   const handleBuyNow = (product) => {
@@ -84,23 +235,8 @@ const Home = () => {
     navigate(`/product/${product.id}`);
   };
 
-  const handleShare = (product) => {
-    if (navigator.share) {
-      navigator.share({
-        title: product.name,
-        text: `Check out this amazing ${product.name} on Dovini!`,
-        url: window.location.origin + `/product/${product.id}`
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.origin + `/product/${product.id}`);
-      showSuccess('🔗 Product link copied to clipboard!');
-    }
-  };
 
-  const handleNotifyWhenBackInStock = (product) => {
-    showSuccess(`🔔 We'll notify you when ${product.name} is back in stock!`);
-  };
+
 
   
 
@@ -109,11 +245,8 @@ const Home = () => {
       {/* Banner Slider */}
       <Hero />
 
-      {/* Call for Deals Section */}
-    <CallForDealsBanner/>
-
       {/* Flash Deals Section */}
-      <section className="py-16 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 relative overflow-hidden">
+      <section className="py-4 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 relative overflow-hidden hidden sm:block">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-32 h-32 bg-red-500 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -162,32 +295,6 @@ const Home = () => {
               Don't miss out on these incredible deals - ending soon!
             </motion.p>
 
-            {/* Countdown Timer */}
-            <motion.div
-              className="inline-flex items-center space-x-3 sm:space-x-4 bg-white/90 backdrop-blur-sm rounded-xl px-4 sm:px-6 py-3 sm:py-4 shadow-lg border border-red-200"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-              viewport={{ once: true }}
-            >
-              <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 flex-shrink-0" />
-              <div className="flex items-center space-x-2 sm:space-x-3">
-                <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-red-600 leading-none">{timeLeft.hours.toString().padStart(2, '0')}</div>
-                  <div className="text-xs text-gray-600 font-medium">HRS</div>
-                </div>
-                <div className="text-lg sm:text-xl font-bold text-red-400 leading-none">:</div>
-                <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-red-600 leading-none">{timeLeft.minutes.toString().padStart(2, '0')}</div>
-                  <div className="text-xs text-gray-600 font-medium">MIN</div>
-                </div>
-                <div className="text-lg sm:text-xl font-bold text-red-400 leading-none">:</div>
-                <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-red-600 leading-none">{timeLeft.seconds.toString().padStart(2, '0')}</div>
-                  <div className="text-xs text-gray-600 font-medium">SEC</div>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
 
           {/* Flash Deals Horizontal Slider */}
@@ -293,6 +400,11 @@ const Home = () => {
                         </span>
                       </div>
 
+                      {/* Countdown */}
+                      <div className="mb-2">
+                        <Countdown endTime={product.flashDealEnd} />
+                      </div>
+
                       {/* Rating */}
                       <div className="flex items-center space-x-1 mb-3">
                         <div className="flex items-center">
@@ -340,6 +452,271 @@ const Home = () => {
             viewport={{ once: true }}
           >
     
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Mobile Flash Deals Section */}
+      <section className="block md:hidden py-8 px-4">
+        <div className="max-w-sm mx-auto">
+          {/* Main Container Box */}
+          <motion.div
+            className="bg-white rounded-3xl shadow-2xl border-4 border-red-200 relative overflow-hidden cursor-pointer"
+            onClick={() => navigate('/flash-deals')}
+            whileHover={{ scale: 1.02, y: -5 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            {/* Decorative Border Elements */}
+            <div className="absolute -top-1 -left-1 w-8 h-8 bg-red-500 rounded-full"></div>
+            <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 rounded-full"></div>
+            <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-yellow-500 rounded-full"></div>
+            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-red-600 rounded-full"></div>
+
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-4 left-4 w-16 h-16 bg-red-500 rounded-full blur-2xl"></div>
+              <div className="absolute bottom-4 right-4 w-20 h-20 bg-orange-500 rounded-full blur-2xl"></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-yellow-500 rounded-full blur-xl"></div>
+            </div>
+
+            <div className="relative z-10 p-6">
+          {/* Section Header with Lightning Animation */}
+          <motion.div
+            className="text-center mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <motion.div
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full mb-4 shadow-lg relative overflow-hidden"
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              viewport={{ once: true }}
+            >
+              {/* Intense Lightning Flash Background */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-white to-yellow-400"
+                animate={{
+                  opacity: [0, 1, 0.8, 0.3, 1, 0],
+                  scale: [1, 1.2, 1.1, 1.15, 1.05, 1]
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 2
+                }}
+              />
+
+              {/* Secondary Flash Layer */}
+              <motion.div
+                className="absolute inset-0 bg-white"
+                animate={{
+                  opacity: [0, 0.9, 0, 0.7, 0, 0.5, 0]
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 2,
+                  delay: 0.1
+                }}
+              />
+
+              {/* Electric Arc Effect */}
+              <motion.div
+                className="absolute inset-0"
+                style={{
+                  background: 'linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.8) 55%, transparent 60%)'
+                }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  x: [-100, 100, -100]
+                }}
+                transition={{
+                  duration: 0.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 3
+                }}
+              />
+
+              {/* Animated Flame with Intense Effects */}
+              <motion.div
+                className="relative z-20"
+                animate={{
+                  rotate: [0, 15, -15, 10, -10, 0],
+                  scale: [1, 1.4, 1.2, 1.5, 1.1, 1],
+                  filter: [
+                    'brightness(1) hue-rotate(0deg)',
+                    'brightness(2) hue-rotate(45deg)',
+                    'brightness(1.5) hue-rotate(90deg)',
+                    'brightness(2.5) hue-rotate(180deg)',
+                    'brightness(1) hue-rotate(0deg)'
+                  ]
+                }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 2.5
+                }}
+              >
+                <Flame className="w-6 h-6 drop-shadow-lg" />
+                {/* Flame Glow Effect */}
+                <motion.div
+                  className="absolute inset-0 w-6 h-6 bg-orange-400 rounded-full blur-md"
+                  animate={{
+                    scale: [1, 2, 1.5, 1],
+                    opacity: [0.3, 0.8, 0.5, 0.3]
+                  }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatDelay: 2.5
+                  }}
+                />
+              </motion.div>
+
+              {/* Animated Text with Glow */}
+              <motion.span
+                className="font-black text-sm relative z-20 drop-shadow-lg"
+                animate={{
+                  textShadow: [
+                    '0 0 5px rgba(255,255,255,0.5)',
+                    '0 0 20px rgba(255,255,255,1), 0 0 30px rgba(255,215,0,0.8)',
+                    '0 0 10px rgba(255,255,255,0.8)',
+                    '0 0 5px rgba(255,255,255,0.5)'
+                  ]
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 2
+                }}
+              >
+                FLASH DEALS
+              </motion.span>
+
+              {/* Animated Lightning Bolt with Intense Effects */}
+              <motion.div
+                className="relative z-20"
+                animate={{
+                  rotate: [0, -20, 20, -15, 15, 0],
+                  scale: [1, 1.5, 1.3, 1.6, 1.2, 1],
+                  filter: [
+                    'brightness(1) contrast(1)',
+                    'brightness(3) contrast(2)',
+                    'brightness(2) contrast(1.5)',
+                    'brightness(4) contrast(2.5)',
+                    'brightness(1) contrast(1)'
+                  ]
+                }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 2.5,
+                  delay: 0.2
+                }}
+              >
+                <Zap className="w-6 h-6 drop-shadow-lg" />
+                {/* Lightning Glow Effect */}
+                <motion.div
+                  className="absolute inset-0 w-6 h-6 bg-yellow-300 rounded-full blur-lg"
+                  animate={{
+                    scale: [1, 2.5, 2, 1.5, 1],
+                    opacity: [0.2, 1, 0.7, 0.4, 0.2]
+                  }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatDelay: 2.5,
+                    delay: 0.2
+                  }}
+                />
+                {/* Electric Spark Effects */}
+                <motion.div
+                  className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full"
+                  animate={{
+                    scale: [0, 1.5, 0],
+                    opacity: [0, 1, 0]
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatDelay: 4,
+                    delay: 0.5
+                  }}
+                />
+                <motion.div
+                  className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-yellow-200 rounded-full"
+                  animate={{
+                    scale: [0, 1, 0],
+                    opacity: [0, 0.8, 0]
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatDelay: 4,
+                    delay: 0.7
+                  }}
+                />
+              </motion.div>
+            </motion.div>
+
+            <motion.h2
+              className="text-lg font-black text-gray-800 mb-2"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              Limited Time Offers
+            </motion.h2>
+
+            <motion.p
+              className="text-sm text-gray-600"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              Don't miss out on these incredible deals!
+            </motion.p>
+          </motion.div>
+
+          {/* Auto-Sliding Mobile Carousel */}
+          <MobileFlashDealsCarousel
+            flashDeals={flashDeals}
+            onBuyNow={handleBuyNow}
+            onWishlistToggle={handleWishlistToggle}
+            onQuickView={handleQuickView}
+            isInWishlist={isInWishlist}
+          />
+            </div>
+          </motion.div>
+
+          {/* Click Indicator */}
+          <motion.div
+            className="text-center mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.5 }}
+          >
+            <div className="inline-flex items-center space-x-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium">
+              <ArrowRight className="w-4 h-4 animate-bounce" />
+              <span>Tap to explore all flash deals</span>
+              <ArrowRight className="w-4 h-4 animate-bounce" />
+            </div>
           </motion.div>
         </div>
       </section>
@@ -498,7 +875,7 @@ const Home = () => {
                         <div className="flex space-x-1">
                           <motion.button
                             onClick={() => handleWishlistToggle(product)}
-                            className="p-1 rounded bg-gray-100 hover:bg-red-100 transition-colors"
+                            className="flex items-center justify-center p-1 rounded bg-gray-100 hover:bg-red-100 transition-colors"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                           >
@@ -506,7 +883,7 @@ const Home = () => {
                           </motion.button>
                           <motion.button
                             onClick={() => handleQuickView(product)}
-                            className="p-1 rounded bg-gray-100 hover:bg-blue-100 transition-colors"
+                            className="flex items-center justify-center rounded bg-gray-100 hover:bg-blue-100 transition-colors"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                           >
@@ -562,7 +939,7 @@ const Home = () => {
       </section>
 
       {/* Featured Categories */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 via-red-50/20 to-white relative overflow-hidden">
+      <section className="py-12 sm:py-16 bg-gradient-to-br from-slate-50 via-red-50/20 to-white relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 right-20 w-40 h-40 bg-red-600 rounded-full blur-3xl"></div>
@@ -594,7 +971,7 @@ const Home = () => {
         <div className="container mx-auto px-4 relative z-10">
           {/* Section Header */}
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -635,7 +1012,7 @@ const Home = () => {
           </motion.div>
 
           {/* Categories Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-12 p-4">
             {categories.map((category, index) => (
               <motion.div
                 key={category.id}
@@ -653,21 +1030,6 @@ const Home = () => {
                 className="group"
               >
                 <div className="relative">
-                  {/* Category Stats Badge */}
-                  <motion.div
-                    className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg"
-                    initial={{ scale: 0, rotate: -45 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    transition={{
-                      delay: index * 0.2 + 0.5,
-                      type: "spring",
-                      stiffness: 300
-                    }}
-                    viewport={{ once: true }}
-                  >
-                    {Math.floor(Math.random() * 500) + 100}+ Items
-                  </motion.div>
-
                   {/* Enhanced Category Card */}
                   <div className="relative overflow-hidden rounded-3xl bg-white shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100">
                     {/* Background Gradient Overlay */}

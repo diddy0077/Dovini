@@ -28,6 +28,7 @@ import {
   MapPin,
   Phone,
   Mail,
+  Sparkles,
   Eye,
   ThumbsUp,
   Flag,
@@ -54,6 +55,10 @@ const ProductDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState(null);
+
+  useEffect(() => {
+   window.scrollTo({top: 0, behavior: 'smooth'})
+  },[])
 
   
   useEffect(() => {
@@ -138,13 +143,13 @@ const ProductDetails = () => {
   };
 
   const nextImage = () => {
-    if (product?.images) {
+    if (product?.images && product.images.length > 0) {
       setSelectedImage((prev) => (prev + 1) % product.images.length);
     }
   };
 
   const prevImage = () => {
-    if (product?.images) {
+    if (product?.images && product.images.length > 0) {
       setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
     }
   };
@@ -206,7 +211,7 @@ const ProductDetails = () => {
                 onClick={() => setIsImageZoomed(true)}
               >
                 <img
-                  src={product.images?.[selectedImage] || product.image}
+                  src={product.images && product.images.length > 0 ? product.images[selectedImage] : product.image}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
@@ -262,7 +267,7 @@ const ProductDetails = () => {
                     }`}
                   >
                     <img
-                      src={image}
+                      src={product.images && product.images.length > 0 ? product.images[index] : product.image}
                       alt={`${product.name} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
@@ -441,28 +446,26 @@ const ProductDetails = () => {
 
         {/* Product Details Tabs */}
         <div className="mt-12 bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="border-b border-gray-200">
-            <div className="flex gap-4 overflow-x-auto p-4">
-              {['description', 'specifications', 'reviews', 'faq'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-8 py-4 font-medium transition-colors capitalize ${
-                    activeTab === tab
-                      ? 'text-red-600 border-b-2 border-red-600 bg-red-50'
-                      : 'text-gray-600 hover:text-red-600'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
+          <div className="flex gap-2 sm:gap-4 overflow-x-auto px-4 py-2">
+            {['description', 'specifications', 'reviews', 'faq'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-3 sm:px-6 lg:px-8 py-3 sm:py-4 font-medium transition-colors capitalize whitespace-nowrap flex-shrink-0 ${
+                  activeTab === tab
+                    ? 'text-red-600 border-b-2 border-red-600 bg-red-50'
+                    : 'text-gray-600 hover:text-red-600'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
-          <div className="p-8">
+          <div className="p-4 sm:p-6 lg:p-8">
             {activeTab === 'description' && (
               <div className="prose max-w-none">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Product Description</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Product Description</h3>
                 <p className="text-gray-700 leading-relaxed mb-6">
                   {product.description}
                 </p>
@@ -515,7 +518,7 @@ const ProductDetails = () => {
 
             {activeTab === 'specifications' && (
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Technical Specifications</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Technical Specifications</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                     <div className="border-b border-gray-200 pb-3">
@@ -551,24 +554,24 @@ const ProductDetails = () => {
 
             {activeTab === 'reviews' && (
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900">Customer Reviews</h3>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Customer Reviews</h3>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-5 h-5 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 ${
                             i < Math.floor(averageRating)
                               ? 'text-yellow-400 fill-current'
                               : 'text-gray-300'
                           }`}
                         />
                       ))}
-                      <span className="font-semibold text-gray-900 ml-2">
+                      <span className="font-semibold text-gray-900 ml-2 text-sm sm:text-base">
                         {averageRating.toFixed(1)}
                       </span>
-                      <span className="text-gray-600">({reviews.length} reviews)</span>
+                      <span className="text-gray-600 text-sm">({reviews.length} reviews)</span>
                     </div>
                   </div>
                 </div>
@@ -576,21 +579,21 @@ const ProductDetails = () => {
                 <div className="space-y-6">
                   {reviews.slice(0, showAllReviews ? reviews.length : 3).map((review) => (
                     <div key={review.id} className="border border-gray-200 rounded-lg p-6">
-                      <div className="flex items-start justify-between mb-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                            <span className="text-red-600 font-semibold">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span className="text-red-600 font-semibold text-sm sm:text-base">
                               {review.name.charAt(0)}
                             </span>
                           </div>
-                          <div>
-                            <div className="font-medium text-gray-900">{review.name}</div>
-                            <div className="flex items-center space-x-2">
+                          <div className="min-w-0 flex-1">
+                            <div className="font-medium text-gray-900 text-sm sm:text-base">{review.name}</div>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2">
                               <div className="flex">
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`w-4 h-4 ${
+                                    className={`w-3 h-3 sm:w-4 sm:h-4 ${
                                       i < review.rating
                                         ? 'text-yellow-400 fill-current'
                                         : 'text-gray-300'
@@ -599,24 +602,24 @@ const ProductDetails = () => {
                                 ))}
                               </div>
                               {review.verified && (
-                                <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">
+                                <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full whitespace-nowrap">
                                   Verified Purchase
                                 </span>
                               )}
                             </div>
                           </div>
                         </div>
-                        <div className="text-sm text-gray-500">{review.date}</div>
+                        <div className="text-xs sm:text-sm text-gray-500 flex-shrink-0">{review.date}</div>
                       </div>
                       <p className="text-gray-700 mb-4">{review.comment}</p>
-                      <div className="flex items-center space-x-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                         <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900">
                           <ThumbsUp className="w-4 h-4" />
                           <span>Helpful ({review.helpful})</span>
                         </button>
-                        <button className="text-sm text-gray-600 hover:text-gray-900">
-                          <Flag className="w-4 h-4 inline mr-1" />
-                          Report
+                        <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900">
+                          <Flag className="w-4 h-4" />
+                          <span>Report</span>
                         </button>
                       </div>
                     </div>
@@ -638,19 +641,19 @@ const ProductDetails = () => {
 
             {activeTab === 'faq' && (
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h3>
                 <div className="space-y-4">
                   {faqs.map((faq, index) => (
                     <div key={index} className="border border-gray-200 rounded-lg">
                       <button
                         onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                        className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                        className="w-full px-4 sm:px-6 py-3 sm:py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
                       >
-                        <span className="font-medium text-gray-900">{faq.question}</span>
+                        <span className="font-medium text-gray-900 text-sm sm:text-base pr-2">{faq.question}</span>
                         {expandedFaq === index ? (
-                          <ChevronUp className="w-5 h-5 text-gray-500" />
+                          <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
                         ) : (
-                          <ChevronDown className="w-5 h-5 text-gray-500" />
+                          <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
                         )}
                       </button>
                       <AnimatePresence>
@@ -661,7 +664,7 @@ const ProductDetails = () => {
                             exit={{ height: 0, opacity: 0 }}
                             className="overflow-hidden"
                           >
-                            <div className="px-6 pb-4 text-gray-700">
+                            <div className="px-4 sm:px-6 pb-3 sm:pb-4 text-gray-700 text-sm sm:text-base">
                               {faq.answer}
                             </div>
                           </motion.div>
@@ -677,37 +680,137 @@ const ProductDetails = () => {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.map((relatedProduct) => (
+          <motion.div
+            className="mt-16 sm:mt-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            {/* Section Header */}
+            <div className="text-center mb-12">
+              <motion.div
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-100 to-red-200 px-4 py-2 rounded-full mb-4"
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                viewport={{ once: true }}
+              >
+                <Sparkles className="w-4 h-4 text-red-600" />
+                <span className="text-red-700 font-medium text-sm">You might also like</span>
+              </motion.div>
+
+              <motion.h2
+                className="text-3xl sm:text-4xl font-black text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                Related <span className="text-red-600">Products</span>
+              </motion.h2>
+
+              <motion.p
+                className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                Discover more products from our collection that complement your choice
+              </motion.p>
+            </div>
+
+            {/* Products Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+              {relatedProducts.map((relatedProduct, index) => (
                 <motion.div
                   key={relatedProduct.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.1,
+                    type: "spring",
+                    stiffness: 100
+                  }}
                   viewport={{ once: true }}
+                  whileHover={{
+                    y: -8,
+                    transition: { duration: 0.2 }
+                  }}
+                  className="group"
                 >
-                  <Link to={`/product/${relatedProduct.id}`}>
-                    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
-                      <div className="aspect-square overflow-hidden">
-                        <img
-                          src={relatedProduct.image}
-                          alt={relatedProduct.name}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
+                  <Link to={`/product/${relatedProduct.id}`} className="block">
+                    <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-200">
+
+                      {/* Product Image */}
+                      <div className="relative overflow-hidden">
+                        <div className="aspect-square overflow-hidden">
+                          <img
+                            src={relatedProduct.image}
+                            alt={relatedProduct.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          />
+                        </div>
+
+                        {/* Overlay Effects */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                        {/* Quick Action Button */}
+                        <motion.div
+                          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300"
+                          initial={{ scale: 0.8 }}
+                          whileHover={{ scale: 1.1 }}
+                        >
+                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
+                            <Eye className="w-4 h-4 text-gray-700" />
+                          </div>
+                        </motion.div>
+
+                        {/* Rating Badge */}
+                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
+                          <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                          <span className="text-xs font-semibold text-gray-800">{relatedProduct.rating}</span>
+                        </div>
                       </div>
-                      <div className="p-4">
-                        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+
+                      {/* Product Info */}
+                      <div className="p-5">
+                        <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-sm sm:text-base group-hover:text-red-600 transition-colors duration-300">
                           {relatedProduct.name}
                         </h3>
+
                         <div className="flex items-center justify-between">
-                          <span className="text-lg font-bold text-red-600">
-                            ₦{relatedProduct.price.toLocaleString()}
-                          </span>
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                            <span className="text-sm text-gray-600">{relatedProduct.rating}</span>
+                          <div className="flex flex-col">
+                            <span className="text-lg sm:text-xl font-black text-red-600">
+                              ₦{relatedProduct.price.toLocaleString()}
+                            </span>
+                            <span className="text-xs text-gray-500">Free shipping</span>
+                          </div>
+
+                          <motion.button
+                            className="bg-red-600 text-white p-3 rounded-xl hover:bg-red-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleAddToCart();
+                            }}
+                          >
+                            <ShoppingCart className="w-4 h-4" />
+                          </motion.button>
+                        </div>
+
+                        {/* Features */}
+                        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                          <div className="flex items-center space-x-1 text-xs text-gray-600">
+                            <CheckCircle className="w-3 h-3 text-green-500" />
+                            <span>In Stock</span>
+                          </div>
+                          <div className="flex items-center space-x-1 text-xs text-gray-600">
+                            <Shield className="w-3 h-3 text-blue-500" />
+                            <span>Warranty</span>
                           </div>
                         </div>
                       </div>
@@ -716,7 +819,27 @@ const ProductDetails = () => {
                 </motion.div>
               ))}
             </div>
-          </div>
+
+            {/* View All Button */}
+            <motion.div
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <Link to="/products">
+                <motion.button
+                  className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-2xl font-bold hover:shadow-2xl transition-all duration-300 flex items-center space-x-2 mx-auto"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span>View All Products</span>
+                  <ChevronRight className="w-5 h-5" />
+                </motion.button>
+              </Link>
+            </motion.div>
+          </motion.div>
         )}
       </div>
 
@@ -738,7 +861,7 @@ const ProductDetails = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <img
-                src={product.images?.[selectedImage] || product.image}
+                src={product.images && product.images.length > 0 ? product.images[selectedImage] : product.image}
                 alt={product.name}
                 className="max-w-full max-h-full object-contain"
               />

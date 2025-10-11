@@ -142,7 +142,7 @@ const HeaderAd = () => {
         />
       </div>
 
-      <div className="relative px-3 sm:px-4 py-1.5 sm:py-3">
+      <div className="relative px-3 sm:px-4 py-0.5 sm:py-3">
         <div className="max-w-7xl mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
@@ -153,52 +153,62 @@ const HeaderAd = () => {
               exit={{ x: -50, opacity: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              {/* Top Section - Badge and Title (Mobile) */}
-              <div className="flex items-center justify-between sm:hidden">
-                <div className="flex items-center space-x-2">
-                  {/* Badge */}
-                  <motion.div
-                    className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full border border-white/30"
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              {/* Mobile Simple Ad */}
+              <div className="sm:hidden py-2">
+                <motion.div
+                  className="flex flex-col space-y-1"
+                  initial={{ x: 50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -50, opacity: 0 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <motion.div
+                        className="bg-white/20 backdrop-blur-sm p-1 rounded-full"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                      >
+                        <IconComponent className="w-4 h-4 text-white" />
+                      </motion.div>
+                      <motion.h3
+                        className="text-white font-bold text-sm tracking-wide"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        {currentAdData.title}
+                      </motion.h3>
+                    </div>
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+                    >
+                      <Link
+                        to={currentAdData.link}
+                        className="bg-white text-gray-900 px-3 py-1 rounded-full font-semibold text-xs hover:bg-gray-50 transition-all duration-200 shadow-lg"
+                      >
+                        {currentAdData.cta}
+                      </Link>
+                    </motion.div>
+                  </div>
+                  <motion.p
+                    className="text-white/90 text-xs font-medium leading-tight"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
                   >
-                    <span className="text-white font-bold text-xs tracking-wide">
-                      {currentAdData.badge}
-                    </span>
-                  </motion.div>
-
-                  {/* Icon */}
-                  <motion.div
-                    className="bg-white/20 backdrop-blur-sm p-1 rounded-full"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-                  >
-                    <IconComponent className="w-3.5 h-3.5 text-white" />
-                  </motion.div>
-                </div>
-
-                {/* Countdown Timer (Mobile - for flash sales) */}
-                {currentAdData.type === 'flash-sale' && (
-                  <motion.div
-                    className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-                  >
-                    <Clock className="w-3 h-3 text-white" />
-                    <span className="text-white font-mono text-xs font-bold">
-                      {timeLeft.minutes.toString().padStart(2, '0')}:{timeLeft.seconds.toString().padStart(2, '0')}
-                    </span>
-                  </motion.div>
-                )}
+                    {currentAdData.message}
+                  </motion.p>
+                </motion.div>
               </div>
 
-              {/* Main Content Section */}
-              <div className="flex items-center space-x-2 sm:space-x-4 flex-1">
-                {/* Badge and Icon (Desktop) */}
-                <div className="hidden sm:flex items-center space-x-3">
+              {/* Desktop Content */}
+              <div className="hidden sm:flex items-center space-x-4 flex-1">
+                {/* Badge and Icon */}
+                <div className="flex items-center space-x-3">
                   {/* Badge */}
                   <motion.div
                     className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full border border-white/30"
@@ -224,94 +234,78 @@ const HeaderAd = () => {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  {/* Desktop Content */}
-                  <div className="hidden sm:block">
-                    <motion.h3
-                      className="text-white font-bold text-sm tracking-wide"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      {currentAdData.title}
-                    </motion.h3>
-                    <motion.p
-                      className="text-white/90 text-sm font-medium truncate"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      {currentAdData.message}
-                    </motion.p>
-                    <motion.p
-                      className="text-white/70 text-xs truncate"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.6 }}
-                    >
-                      {currentAdData.subtitle}
-                    </motion.p>
-                  </div>
-
-                  {/* Mobile Content */}
-                  <div className="sm:hidden">
-                    <motion.h3
-                      className="text-white font-bold text-xs tracking-wide mb-0.5"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      {currentAdData.title}
-                    </motion.h3>
-                    <motion.p
-                      className="text-white/90 text-xs font-medium leading-tight"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      {currentAdData.message}
-                    </motion.p>
-                    <motion.p
-                      className="text-white/70 text-xs mt-0.5 leading-tight"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.6 }}
-                    >
-                      {currentAdData.subtitle}
-                    </motion.p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Section - CTA and Controls (Mobile) */}
-              <div className="flex items-center justify-between sm:hidden">
-                {/* CTA Button */}
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
-                >
-                  <Link
-                    to={currentAdData.link}
-                    className="group bg-white text-gray-900 px-3 py-1.5 rounded-full font-semibold text-xs hover:bg-gray-50 transition-all duration-200 flex items-center space-x-1.5 shadow-lg hover:shadow-xl"
+                  <motion.h3
+                    className="text-white font-bold text-sm tracking-wide"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
                   >
-                    <span>{currentAdData.cta}</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                  </Link>
-                </motion.div>
+                    {currentAdData.title}
+                  </motion.h3>
+                  <motion.p
+                    className="text-white/90 text-sm font-medium truncate"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    {currentAdData.message}
+                  </motion.p>
+                  <motion.p
+                    className="text-white/70 text-xs truncate"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    {currentAdData.subtitle}
+                  </motion.p>
+                </div>
 
-                {/* Ad Indicators (Mobile) */}
-                <div className="flex justify-center items-center space-x-1 ">
-                  {ads.map((_, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setCurrentAd(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                        index === currentAd
-                          ? 'bg-white shadow-lg'
-                          : 'bg-white/40 hover:bg-white/60'
-                      }`}
-                    ></div>
-                  ))}
+                {/* Desktop Right Side - CTA and Timer */}
+                <div className="flex items-center space-x-4">
+                  {/* Countdown Timer (for flash sales) */}
+                  {currentAdData.type === 'flash-sale' && (
+                    <motion.div
+                      className="hidden md:flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
+                    >
+                      <Clock className="w-4 h-4 text-white" />
+                      <span className="text-white font-mono text-sm font-bold">
+                        {timeLeft.minutes.toString().padStart(2, '0')}:{timeLeft.seconds.toString().padStart(2, '0')}
+                      </span>
+                    </motion.div>
+                  )}
+
+                  {/* CTA Button */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
+                  >
+                    <Link
+                      to={currentAdData.link}
+                      className="group bg-white text-gray-900 px-4 py-2 rounded-full font-semibold text-sm hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl"
+                    >
+                      <span>{currentAdData.cta}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </motion.div>
+
+                  {/* Ad Indicators */}
+                  <div className="hidden lg:flex items-center space-x-1">
+                    {ads.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentAd(index)}
+                        className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                          index === currentAd
+                            ? 'bg-white shadow-lg'
+                            : 'bg-white/40 hover:bg-white/60'
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -333,34 +327,7 @@ const HeaderAd = () => {
                 )}
 
                 {/* CTA Button */}
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-                >
-                  <Link
-                    to={currentAdData.link}
-                    className="group bg-white text-gray-900 px-4 py-2 rounded-full font-semibold text-sm hover:bg-gray-50 transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl"
-                  >
-                    <span>{currentAdData.cta}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </motion.div>
-
-                {/* Ad Indicators */}
-                <div className="hidden lg:flex items-center space-x-1">
-                  {ads.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentAd(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                        index === currentAd
-                          ? 'bg-white shadow-lg'
-                          : 'bg-white/40 hover:bg-white/60'
-                      }`}
-                    />
-                  ))}
-                </div>
+              
               </div>
             </motion.div>
           </AnimatePresence>
@@ -369,7 +336,7 @@ const HeaderAd = () => {
 
       {/* Progress Bar */}
       <motion.div
-        className="absolute bottom-0 left-0 h-0.5 bg-white/30"
+        className="absolute bottom-0 left-0 h-0.5 bg-white/30 hidden sm:block"
         initial={{ width: "0%" }}
         animate={{ width: "100%" }}
         transition={{ duration: 6, ease: "linear" }}

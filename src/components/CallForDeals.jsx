@@ -20,7 +20,7 @@ const containerVariants = {
 const CallForDealsBanner = () => {
   return (
     <motion.div
-      className="relative overflow-hidden md:mx-auto mx-4 max-w-7xl rounded-2xl sm:rounded-3xl shadow-2xl my-8 sm:my-12 "
+      className="relative overflow-hidden md:mx-auto mx-4 max-w-7xl rounded-2xl sm:rounded-3xl shadow-2xl my-6 sm:my-8 "
       initial={{ opacity: 0, y: -40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
@@ -29,7 +29,7 @@ const CallForDealsBanner = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        minHeight: '280px'
+        minHeight: '200px'
       }}
     >
       {/* Animated Background Elements */}
@@ -62,8 +62,8 @@ const CallForDealsBanner = () => {
       </div>
 
       {/* Container for content */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
 
           {/* Left Content Section */}
           <motion.div
@@ -83,7 +83,7 @@ const CallForDealsBanner = () => {
 
             {/* Main Title */}
             <motion.h2
-              className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black text-white mb-3 sm:mb-4 leading-tight drop-shadow-lg"
+              className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-black text-white mb-2 sm:mb-3 leading-tight drop-shadow-lg"
               variants={itemVariants}
             >
               Need Expert Advice?
@@ -93,7 +93,7 @@ const CallForDealsBanner = () => {
 
             {/* Subtitle */}
             <motion.p
-              className="text-base sm:text-lg lg:text-xl text-red-100 mb-6 sm:mb-8 max-w-md mx-auto lg:mx-0 drop-shadow-md"
+              className="text-sm sm:text-base lg:text-lg text-red-100 mb-4 sm:mb-6 max-w-md mx-auto lg:mx-0 drop-shadow-md"
               variants={itemVariants}
             >
               Get personalized recommendations, exclusive deals, and instant answers from our certified photography experts.
@@ -101,7 +101,7 @@ const CallForDealsBanner = () => {
 
             {/* Features List */}
             <motion.div
-              className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 mb-6 sm:mb-8"
+              className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mb-4 sm:mb-6"
               variants={itemVariants}
             >
               <div className="flex items-center space-x-2 text-white/90">
@@ -133,12 +133,12 @@ const CallForDealsBanner = () => {
               variants={itemVariants}
             >
               <motion.div
-                className="bg-white/10 backdrop-blur-md border-2 border-white/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 hover:bg-white/20 transition-all duration-300 shadow-2xl"
+                className="bg-white/10 backdrop-blur-md border-2 border-white/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 hover:bg-white/20 transition-all duration-300 shadow-2xl"
                 whileHover={{ scale: 1.02, y: -5 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <motion.div
-                  className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-4 drop-shadow-2xl tracking-wider"
+                  className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-white mb-3 drop-shadow-2xl tracking-wider"
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
@@ -154,11 +154,11 @@ const CallForDealsBanner = () => {
                 </motion.div>
 
                 <motion.button
-                  className="bg-white text-red-600 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base lg:text-lg shadow-xl hover:bg-red-50 transition-all duration-300 flex items-center justify-center space-x-2 mx-auto lg:mx-0"
+                  className="bg-white text-red-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-bold text-sm sm:text-base shadow-xl hover:bg-red-50 transition-all duration-300 flex items-center justify-center space-x-2 mx-auto lg:mx-0"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>Call for Deals</span>
                 </motion.button>
               </motion.div>
@@ -166,7 +166,7 @@ const CallForDealsBanner = () => {
 
             {/* Additional Info */}
             <motion.p
-              className="text-xs sm:text-sm text-white/80 mt-4 max-w-sm mx-auto lg:mx-0 lg:text-right"
+              className="text-xs text-white/80 mt-3 max-w-sm mx-auto lg:mx-0 lg:text-right"
               variants={itemVariants}
             >
               Free consultation • No obligation • Instant expert advice

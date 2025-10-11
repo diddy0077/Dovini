@@ -40,7 +40,9 @@ const Cart = () => {
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState(0);
 
-
+ useEffect(() => {
+   window.scrollTo({top: 0, behavior: 'smooth'})
+  },[])
 
 
   // Mock cross-sell recommendations
@@ -182,7 +184,7 @@ const Cart = () => {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-6">
             {/* Cart Items Header */}
@@ -252,61 +254,64 @@ const Cart = () => {
                         </div>
 
                         {/* Quantity and Actions */}
-                        <div className="flex items-center justify-between sm:justify-end sm:space-x-4 flex-shrink-0">
-                          {/* Quantity Controls */}
-                          <div className="flex items-center space-x-2 bg-white rounded-lg border border-gray-200 p-1">
-                            <motion.button
-                              onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
-                            </motion.button>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                          {/* Quantity Controls and Item Total */}
+                          <div className="flex items-center justify-between sm:justify-start space-x-4">
+                            {/* Quantity Controls */}
+                            <div className="flex items-center space-x-2 bg-white rounded-lg border border-gray-200 p-1 flex-shrink-0">
+                              <motion.button
+                                onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                              >
+                                <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
+                              </motion.button>
 
-                            <span className="w-8 sm:w-12 text-center font-semibold text-gray-800 text-sm sm:text-base">
-                              {item.quantity}
-                            </span>
+                              <span className="w-8 sm:w-12 text-center font-semibold text-gray-800 text-sm sm:text-base">
+                                {item.quantity}
+                              </span>
 
-                            <motion.button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
-                            </motion.button>
-                          </div>
-
-                          {/* Item Total */}
-                          <div className="text-right sm:mr-4">
-                            <div className="text-base sm:text-lg font-bold text-gray-800">
-                              ₦{(item.price * item.quantity).toLocaleString()}
+                              <motion.button
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                              >
+                                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                              </motion.button>
                             </div>
-                            <div className="text-xs sm:text-sm text-gray-600">
-                              ₦{item.price.toLocaleString()} each
+
+                            {/* Item Total */}
+                            <div className="text-center sm:text-left">
+                              <div className="text-base sm:text-lg font-bold text-gray-800">
+                                ₦{(item.price * item.quantity).toLocaleString()}
+                              </div>
+                              <div className="text-xs sm:text-sm text-gray-600">
+                                ₦{item.price.toLocaleString()} each
+                              </div>
                             </div>
                           </div>
 
                           {/* Actions */}
-                          <div className="flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2 ml-4 sm:ml-0">
+                          <div className="flex space-x-2 sm:space-x-0 sm:space-y-2 sm:flex-col justify-center sm:justify-end">
                             <motion.button
                               onClick={() => handleSaveForLater(item)}
-                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-blue-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-blue-50 cursor-pointer"
+                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50 cursor-pointer"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <BookmarkPlus className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <BookmarkPlus className="w-4 h-4" />
                               <span className="text-xs sm:text-sm hidden sm:inline">Save</span>
                             </motion.button>
 
                             <motion.button
                               onClick={() => removeFromCart(item.id)}
-                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-red-600 transition-colors p-1.5 sm:p-2 rounded-lg hover:bg-red-50 cursor-pointer"
+                              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50 cursor-pointer"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <Trash2 className="w-4 h-4" />
                               <span className="text-xs sm:text-sm hidden sm:inline">Remove</span>
                             </motion.button>
                           </div>
@@ -333,18 +338,18 @@ const Cart = () => {
 
                 <div className="space-y-3">
                   {savedItems.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div key={item.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-gray-50 rounded-lg gap-3">
                       <div className="flex items-center space-x-4">
-                        <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
-                        <div>
-                          <h4 className="font-semibold text-gray-800">{item.name}</h4>
-                          <p className="text-red-600 font-bold">₦{item.price.toLocaleString()}</p>
+                        <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded flex-shrink-0" />
+                        <div className="min-w-0">
+                          <h4 className="font-semibold text-gray-800 text-sm sm:text-base">{item.name}</h4>
+                          <p className="text-red-600 font-bold text-sm sm:text-base">₦{item.price.toLocaleString()}</p>
                         </div>
                       </div>
 
                       <motion.button
                         onClick={() => handleMoveToCart(item)}
-                        className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 cursor-pointer"
+                        className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 cursor-pointer w-full sm:w-auto text-sm"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -371,7 +376,7 @@ const Cart = () => {
                 <span>You Might Also Like</span>
               </h3>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 {recommendations.map((product, index) => (
                   <motion.div
                     key={product.id}
@@ -408,7 +413,7 @@ const Cart = () => {
           <div className="space-y-4 sm:space-y-6">
             {/* Order Summary */}
             <motion.div
-              className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:sticky lg:top-6"
+              className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 xl:sticky xl:top-6"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -421,17 +426,17 @@ const Cart = () => {
               {/* Promo Code */}
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Promo Code</label>
-                <div className="flex space-x-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     value={promoCode}
                     onChange={(e) => setPromoCode(e.target.value)}
                     placeholder="Enter promo code"
-                    className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   />
                   <motion.button
                     onClick={applyPromoCode}
-                    className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
+                    className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 whitespace-nowrap"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -462,7 +467,7 @@ const Cart = () => {
                     <motion.div
                       key={option.id}
                       onClick={() => setSelectedShipping(option.id)}
-                      className={`p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
+                      className={`p-3 sm:p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
                         selectedShipping === option.id
                           ? 'border-red-500 bg-red-50'
                           : 'border-gray-200 hover:border-gray-300'
@@ -470,15 +475,15 @@ const Cart = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                          <option.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${selectedShipping === option.id ? 'text-red-600' : 'text-gray-600'}`} />
-                          <div>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                        <div className="flex items-center space-x-3">
+                          <option.icon className={`w-5 h-5 ${selectedShipping === option.id ? 'text-red-600' : 'text-gray-600'} flex-shrink-0`} />
+                          <div className="min-w-0">
                             <div className="font-semibold text-gray-800 text-sm sm:text-base">{option.name}</div>
                             <div className="text-xs sm:text-sm text-gray-600">{option.time}</div>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-left sm:text-right">
                           <div className="font-bold text-gray-800 text-sm sm:text-base">
                             {option.cost === 0 ? 'FREE' : `₦${option.cost.toLocaleString()}`}
                           </div>
@@ -507,28 +512,28 @@ const Cart = () => {
               {/* Order Breakdown */}
               <div className="border-t border-gray-200 pt-6 space-y-3">
                 <div className="flex justify-between text-gray-600">
-                  <span>Subtotal ({cart.length} items)</span>
-                  <span>₦{subtotal.toLocaleString()}</span>
+                  <span className="text-sm sm:text-base">Subtotal ({cart.length} items)</span>
+                  <span className="text-sm sm:text-base font-medium">₦{subtotal.toLocaleString()}</span>
                 </div>
 
                 <div className="flex justify-between text-gray-600">
-                  <span>Shipping</span>
-                  <span>{shippingCost === 0 ? 'FREE' : `₦${shippingCost.toLocaleString()}`}</span>
+                  <span className="text-sm sm:text-base">Shipping</span>
+                  <span className="text-sm sm:text-base font-medium">{shippingCost === 0 ? 'FREE' : `₦${shippingCost.toLocaleString()}`}</span>
                 </div>
 
                 {appliedDiscount > 0 && (
                   <div className="flex justify-between text-green-600 font-semibold">
-                    <span>Discount</span>
-                    <span>-₦{appliedDiscount.toLocaleString()}</span>
+                    <span className="text-sm sm:text-base">Discount</span>
+                    <span className="text-sm sm:text-base">-₦{appliedDiscount.toLocaleString()}</span>
                   </div>
                 )}
 
                 <div className="border-t border-gray-300 pt-3">
-                  <div className="flex justify-between text-2xl font-black text-gray-800">
-                    <span>Total</span>
-                    <span>₦{total.toLocaleString()}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between space-y-1 sm:space-y-0">
+                    <span className="text-lg sm:text-2xl font-black text-gray-800">Total</span>
+                    <span className="text-lg sm:text-2xl font-black text-gray-800">₦{total.toLocaleString()}</span>
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div className="text-xs sm:text-sm text-gray-600 mt-1">
                     Including VAT • Excluding import duties
                   </div>
                 </div>
@@ -551,7 +556,7 @@ const Cart = () => {
               </motion.div>
 
               {/* Security Badges */}
-              <div className="mt-6 flex items-center justify-center space-x-4">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
                 <div className="flex items-center space-x-1 text-gray-600">
                   <Shield className="w-4 h-4 text-green-600" />
                   <span className="text-xs">SSL Secured</span>
@@ -569,11 +574,11 @@ const Cart = () => {
               {/* Payment Methods Preview */}
               <div className="mt-6">
                 <p className="text-sm text-gray-600 mb-3 text-center">We accept</p>
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="bg-gray-100 px-3 py-1 rounded text-xs font-semibold">Visa</div>
-                  <div className="bg-gray-100 px-3 py-1 rounded text-xs font-semibold">Mastercard</div>
-                  <div className="bg-gray-100 px-3 py-1 rounded text-xs font-semibold">PayPal</div>
-                  <div className="bg-gray-100 px-3 py-1 rounded text-xs font-semibold">Bank Transfer</div>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <div className="bg-gray-100 px-2 sm:px-3 py-1 rounded text-xs font-semibold">Visa</div>
+                  <div className="bg-gray-100 px-2 sm:px-3 py-1 rounded text-xs font-semibold">Mastercard</div>
+                  <div className="bg-gray-100 px-2 sm:px-3 py-1 rounded text-xs font-semibold">PayPal</div>
+                  <div className="bg-gray-100 px-2 sm:px-3 py-1 rounded text-xs font-semibold">Bank Transfer</div>
                 </div>
               </div>
             </motion.div>

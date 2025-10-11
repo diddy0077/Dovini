@@ -25,6 +25,10 @@ const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { addToCart } = useCart();
 
+   useEffect(() => {
+     window.scrollTo({top: 0, behavior: 'smooth'})
+   }, [])
+  
   // Get category from URL params
   const categoryParam = searchParams.get('category');
   const searchQuery = searchParams.get('search') || '';
@@ -167,9 +171,9 @@ const Products = () => {
   const categoryInfo = getCategoryInfo();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/20 to-white overflow-hidden">
       {/* Header */}
-      <div className="bg-white shadow-lg border-b border-red-100">
+      <div className="bg-white shadow-lg border-b border-red-100 top-0 z-30">
         <div className="container mx-auto px-4 py-6">
           {/* Breadcrumb */}
           <motion.nav
@@ -197,13 +201,13 @@ const Products = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl font-black text-gray-800 mb-2">
+            <h1 className="text-3xl md:text-4xl font-black text-gray-800 mb-2">
               {flashDealsParam ? 'Flash Deals' :
                limitedStockParam ? 'Limited Stock' :
                categoryInfo ? categoryInfo.name :
                searchQuery ? 'Search Results' : 'All Products'}
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="md:text-xl text-gray-600 max-w-2xl mx-auto">
               {flashDealsParam ? 'Limited time offers with amazing discounts - don\'t miss out!' :
                limitedStockParam ? 'Almost gone - secure these items before they\'re sold out!' :
                categoryInfo ? categoryInfo.description || `Discover our premium ${categoryInfo.name.toLowerCase()} equipment for professional photography` :
@@ -228,6 +232,33 @@ const Products = () => {
                 className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent shadow-lg bg-white/80 backdrop-blur-sm"
               />
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            </div>
+          </motion.div>
+
+          {/* Quick Filters */}
+          <motion.div
+            className="mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">Popular Categories</h3>
+            <div className="flex flex-wrap gap-2">
+              {categories.slice(0, 8).map((cat, index) => (
+                <motion.button
+                  key={cat.id}
+                  onClick={() => updateSearchParams('category', cat.name.toLowerCase().replace(/\s+/g, '-'))}
+                  className="flex items-center space-x-2 bg-white border border-gray-200 hover:border-red-300 hover:bg-red-50 px-3 py-2 rounded-lg transition-all duration-200 text-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                >
+                  <cat.icon className="w-4 h-4 text-red-600" />
+                  <span>{cat.name}</span>
+                </motion.button>
+              ))}
             </div>
           </motion.div>
 
@@ -303,16 +334,31 @@ const Products = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="flex gap-8">
+          {/* Filters Backdrop */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 bg-black/50 z-40"
+                onClick={() => setShowFilters(false)}
+              />
+            )}
+          </AnimatePresence>
+
           {/* Filters Sidebar */}
           <AnimatePresence>
             {showFilters && (
               <motion.div
-                initial={{ opacity: 0, x: -300 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -300 }}
+                initial={{ opacity: 0, y: 300 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 300 }}
                 transition={{ duration: 0.3 }}
-                className="w-80 bg-white rounded-2xl shadow-xl p-6 h-fit sticky top-24"
+                className="fixed inset-0 z-50 flex items-end sm:items-start sm:justify-start"
               >
+                <div className="w-full sm:w-80 bg-white rounded-t-2xl sm:rounded-2xl shadow-xl p-6 h-fit max-h-[80vh] sm:max-h-none overflow-y-auto">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-bold text-gray-800">Filters</h3>
                   <button
@@ -407,12 +453,13 @@ const Products = () => {
                     ))}
                   </div>
                 </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* Products Grid */}
-          <div className="flex-1">
+          <div className="flex-1 w-full">
             {/* Results Count */}
             <motion.div
               className="mb-6"
@@ -429,7 +476,7 @@ const Products = () => {
             {paginatedProducts.length > 0 ? (
               <>
                 <motion.div
-                  className={`grid gap-6 mb-8 ${
+                  className={`grid gap-4 sm:gap-6 mb-8 ${
                     viewMode === 'grid'
                       ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                       : 'grid-cols-1'
@@ -453,7 +500,7 @@ const Products = () => {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <motion.div
-                    className="flex justify-center items-center space-x-2"
+                    className="flex justify-center items-center space-x-2 w-full"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5, duration: 0.5 }}
@@ -461,16 +508,16 @@ const Products = () => {
                     <button
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
-                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     >
-                      Previous
+                      Prev
                     </button>
 
                     {[...Array(totalPages)].map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`px-4 py-2 border rounded-lg ${
+                        className={`px-4 py-2 border flex items-center justify-center rounded-lg ${
                           currentPage === i + 1
                             ? 'bg-red-600 text-white border-red-600'
                             : 'border-gray-300 hover:bg-gray-50'
@@ -483,7 +530,7 @@ const Products = () => {
                     <button
                       onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages}
-                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     >
                       Next
                     </button>

@@ -10,7 +10,8 @@ import {
   User,
   Minimize2,
   Maximize2,
-  MoreVertical
+  MoreVertical,
+  Plus
 } from 'lucide-react';
 
 const Chat = () => {
@@ -18,6 +19,7 @@ const Chat = () => {
   const {
     activeConversation,
     setActiveConversation,
+    startConversation,
     getConversations,
     getConversation,
     sendMessage,
@@ -66,6 +68,14 @@ const Chat = () => {
   const handleBackToList = () => {
     setActiveConversation(null);
     setShowConversationList(true);
+  };
+
+  const handleStartNewChat = () => {
+    // Start a conversation with support team
+    const supportUserId = 'support_team';
+    const supportUserName = 'Support Team';
+    startConversation(supportUserId, supportUserName);
+    setShowConversationList(false);
   };
 
   const formatTime = (timestamp) => {
@@ -133,6 +143,15 @@ const Chat = () => {
                 </span>
               </div>
               <div className="flex items-center space-x-2">
+                {showConversationList && conversations.length > 0 && (
+                  <button
+                    onClick={handleStartNewChat}
+                    className="text-white hover:text-red-200 transition-colors"
+                    title="Start new chat"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                )}
                 <button
                   onClick={() => setIsMinimized(!isMinimized)}
                   className="text-white hover:text-red-200 transition-colors"
@@ -157,8 +176,14 @@ const Chat = () => {
                     {conversations.length === 0 ? (
                       <div className="p-6 text-center text-gray-500">
                         <MessageCircle className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                        <p>No conversations yet</p>
-                        <p className="text-sm">Start chatting with sellers!</p>
+                        <p className="mb-2">No conversations yet</p>
+                        <p className="text-sm mb-4">Start chatting with our support team!</p>
+                        <button
+                          onClick={handleStartNewChat}
+                          className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                        >
+                          Start New Chat
+                        </button>
                       </div>
                     ) : (
                       conversations.map((conversation) => {
@@ -204,7 +229,7 @@ const Chat = () => {
                 {/* Chat Messages */}
                 {currentConversation && !showConversationList && (
                   <>
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    <div className="flex-1 min-h-[350px] overflow-y-auto p-4 space-y-3">
                       {currentConversation.messages.map((message) => {
                         const isOwnMessage = message.senderId === user.id;
                         return (

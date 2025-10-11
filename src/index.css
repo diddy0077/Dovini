@@ -253,6 +253,11 @@ html {
   }
 }
 
+/* Global button cursor pointer */
+button {
+  cursor: pointer;
+}
+
 /* Focus styles for accessibility */
 button:focus-visible,
 input:focus-visible,

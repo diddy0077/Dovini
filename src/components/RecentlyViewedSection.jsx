@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye } from 'lucide-react';
+import { Eye,Star } from 'lucide-react';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 
 const RecentlyViewedSection = ({ limit = 6 }) => {

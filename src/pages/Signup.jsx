@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ShoppingBag, Store } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ShoppingBag } from 'lucide-react';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,6 @@ const Signup = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'buyer',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -28,12 +27,6 @@ const Signup = () => {
     });
   };
 
-  const handleRoleChange = (role) => {
-    setFormData({
-      ...formData,
-      role,
-    });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +44,8 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      const result = await signup(formData.name, formData.email, formData.password, formData.role);
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+      const result = await signup(formData.name, formData.email, formData.password);
 
       if (result.success) {
         showSuccess('Account created successfully! Welcome to Dovini! 🎉');
@@ -101,43 +95,6 @@ const Signup = () => {
         >
           <div className="bg-white py-8 px-6 shadow-xl rounded-2xl border border-gray-100">
             <div className="space-y-6">
-              {/* Role Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  I want to:
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <motion.button
-                    type="button"
-                    onClick={() => handleRoleChange('buyer')}
-                    className={`p-4 border-2 rounded-xl text-center transition-all duration-200 ${
-                      formData.role === 'buyer'
-                        ? 'border-red-500 bg-red-50 text-red-700'
-                        : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <ShoppingBag className="w-6 h-6 mx-auto mb-2" />
-                    <span className="text-sm font-medium">Buy Products</span>
-                  </motion.button>
-                  <motion.button
-                    type="button"
-                    onClick={() => handleRoleChange('seller')}
-                    className={`p-4 border-2 rounded-xl text-center transition-all duration-200 ${
-                      formData.role === 'seller'
-                        ? 'border-red-500 bg-red-50 text-red-700'
-                        : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Store className="w-6 h-6 mx-auto mb-2" />
-                    <span className="text-sm font-medium">Sell Products</span>
-                  </motion.button>
-                </div>
-              </div>
-
               {/* Name */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">

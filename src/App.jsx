@@ -11,6 +11,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import LoadingSkeleton from './components/LoadingSkeleton';
 import Chat from './components/Chat';
+import ScrollToTop from './components/ScrollToTop';
+import About from './pages/About'
+import Profile from './pages/Profile';
+import AccountSettingsPage from './pages/AccountSettingsPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 // Lazy load pages for code splitting
@@ -23,8 +28,8 @@ const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
-const SellerDashboard = lazy(() => import('./pages/SellerDashboard'));
 const Orders = lazy(() => import('./pages/Orders'));
+const FlashDeals = lazy(() => import('./pages/FlashDeals'));
 
 // Loading component for Suspense fallback
 const PageLoader = () => (
@@ -34,7 +39,7 @@ const PageLoader = () => (
 );
 
 const App = () => {
-    const [recent, setRecent] = useState([]);
+    
   return (
     <AuthProvider>
       <ChatProvider>
@@ -51,19 +56,23 @@ const App = () => {
                           <Route path="/" element={<Home />} />
                           <Route path="/category/:id" element={<Category />} />
                           <Route path="/products" element={<Products />} />
-                          <Route path="/product/:id" element={<ProductDetails recent={recent} setRecent={setRecent}/>} />
+                          <Route path="/product/:id" element={<ProductDetails/>} />
                           <Route path="/wishlist" element={<Wishlist />} />
-                          <Route path="/cart" element={<Cart recent={recent} setRecent={setRecent}/>} />
+                          <Route path="/cart" element={<Cart />} />
                           <Route path="/checkout" element={<Checkout />} />
                           <Route path="/login" element={<Login />} />
                           <Route path="/signup" element={<Signup />} />
-                          <Route path="/seller/dashboard" element={<SellerDashboard />} />
+                          <Route path="/my-account" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                          <Route path="/myaccount/settings" element={<ProtectedRoute><AccountSettingsPage /></ProtectedRoute>} />
                           <Route path="/orders" element={<Orders />} />
+                          <Route path="/flash-deals" element={<FlashDeals />} />
+                          <Route path="/about" element={<About />} />
                         </Routes>
                       </Suspense>
                     </main>
                     <Footer />
                     <Chat />
+                    <ScrollToTop />
                   </div>
                 </CartProvider>
               </WishlistProvider>

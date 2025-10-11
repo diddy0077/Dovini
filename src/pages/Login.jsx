@@ -32,6 +32,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const result = await login(formData.email, formData.password);
 
       if (result.success) {
@@ -164,20 +165,7 @@ const Login = () => {
           </div>
         </motion.form>
 
-        {/* Demo Credentials */}
-        <motion.div
-          className="bg-blue-50 border border-blue-200 rounded-xl p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h3 className="text-sm font-medium text-blue-800 mb-2">Demo Credentials</h3>
-          <p className="text-xs text-blue-600">
-            Email: demo@dovini.com<br />
-            Password: demo123
-          </p>
-        </motion.div>
-
+        
         {/* Sign Up Link */}
         <motion.div
           className="text-center"

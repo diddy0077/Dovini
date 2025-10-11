@@ -55,12 +55,17 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
+  const clearWishlist = () => {
+    setWishlist([]);
+  };
+
   const value = {
     wishlist,
     addToWishlist,
     removeFromWishlist,
     isInWishlist,
     toggleWishlist,
+    clearWishlist,
     wishlistCount: wishlist.length,
   };
 
